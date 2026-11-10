@@ -15,6 +15,6 @@ for file in ("source/install/usb_nsp.cpp", "source/install/usb_xci.cpp"):
 config = (root / "source/util/config.cpp").read_text()
 assert "autoUpdate = false" in config
 assert "ignoreReqVers = false" in config
-assert "gAuthKey = \"\"" in config
+assert "gAuthKey.clear();" in config
 assert "m_serverSocket < 0" in (root / "source/netInstall.cpp").read_text()
 print("Source guards passed. Switch compilation and hardware validation remain required.")
