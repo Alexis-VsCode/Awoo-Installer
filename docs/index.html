@@ -283,6 +283,15 @@
           fillList(task.id, [], ()=>({}), 'No disponible por el momento. Consulta GitHub directamente.');
         }
       }));
+      // GitHub permite deshabilitar Issues en forks; no presentar ese estado como una lista vacía.
+      try {
+        const metadata = await request('');
+        if (metadata.has_issues === false) {
+          fillList('activity-issues', [], () => ({}), 'El seguimiento de incidencias está deshabilitado en este repositorio. El mantenedor debe activarlo en Settings > General > Features > Issues.');
+        }
+      } catch (_) {
+        // La API pública puede estar limitada; conservar enlaces a GitHub.
+      }
       try {
         const data = await request('/actions/runs?branch=feat%2Fkefir-927-modernization&per_page=5');
         const run = data.workflow_runs?.find(r => r.name === 'C++ compatibility and security checks');
