@@ -1,0 +1,36 @@
+name: Validar portal GitHub Pages
+on:
+  push:
+    branches: [master]
+    paths:
+      - 'docs/**'
+      - 'README.md'
+      - 'CHANGELOG.md'
+      - 'CONTRIBUTING.md'
+      - 'scripts/check_website.py'
+      - '.github/workflows/pages-quality.yml'
+  pull_request:
+    branches: [master]
+    paths:
+      - 'docs/**'
+      - 'README.md'
+      - 'CHANGELOG.md'
+      - 'CONTRIBUTING.md'
+      - 'scripts/check_website.py'
+      - '.github/workflows/pages-quality.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  site-quality:
+    name: Integridad HTML, enlaces y JavaScript
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Validar página y documentación
+        run: python3 scripts/check_website.py
