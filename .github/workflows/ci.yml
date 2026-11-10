@@ -31,8 +31,8 @@ jobs:
           # Use packages preinstalled in the pinned devkitPro container.
           # Avoid unaudited package upgrades at build time.
           test -f "$DEVKITPRO/libnx/switch_rules"
-          make -C include/Plutonium/Plutonium -f Makefile.switch -j2
-          test -s include/Plutonium/Plutonium/Output-switch/lib/libpu.a
+          make -C include/Plutonium/Plutonium -f Makefile -j2
+          test -s include/Plutonium/Plutonium/Output/lib/libpu.a
       - name: Compile application
         shell: bash
         run: |
