@@ -1,64 +1,88 @@
 # Awoo Installer Community
 
-**Fork comunitario de [Awoo Installer](https://github.com/Huntereb/Awoo-Installer), mantenido por [Alexis-VsCode](https://github.com/Alexis-VsCode).** Proyecto abierto, gratuito y sin fines de lucro.
+**Continuidad comunitaria de Awoo Installer para Nintendo Switch.**
 
-[**Página web y descargas**](https://alexis-vscode.github.io/Awoo-Installer/) · [**Releases**](https://github.com/Alexis-VsCode/Awoo-Installer/releases) · [**Incidencias**](https://github.com/Alexis-VsCode/Awoo-Installer/issues)
+[Portal del proyecto](https://alexis-vscode.github.io/Awoo-Installer/) · [Código fuente](https://github.com/Alexis-VsCode/Awoo-Installer) · [Descargas](https://github.com/Alexis-VsCode/Awoo-Installer/releases) · [Incidencias](https://github.com/Alexis-VsCode/Awoo-Installer/issues) · [Contribuir](CONTRIBUTING.md)
 
-> **Estado: desarrollo.** No hay todavía un binario comunitario certificado para Nintendo Switch. El fork conserva código heredado, pero una compilación correcta no garantiza compatibilidad con firmware reciente.
+> **Estado del proyecto:** modernización en desarrollo. Las pruebas automatizadas y la compilación de la rama de trabajo se han completado correctamente; la compatibilidad en hardware real aún debe verificarse. No hay una release comunitaria estable aprobada.
 
-## Propósito
+## Presentación
 
-Dar continuidad a Awoo Installer mediante correcciones de seguridad, compatibilidad, estabilidad, documentación y compilaciones verificables. Nuestro aporte consiste en mantenimiento y mejoras propias registradas mediante commits y pull requests. **No afirmamos haber creado el software original.**
+Este repositorio es un **fork de [Awoo Installer](https://github.com/Huntereb/Awoo-Installer)**. Conserva su historial y su licencia y busca mantener el proyecto utilizable mediante correcciones verificables, revisión de dependencias, mejoras de seguridad y documentación accesible.
 
-## Referencia de compatibilidad
+La prioridad es una evolución **incremental**, respetuosa con el código original y centrada en la estabilidad. Cada cambio debe poder revisarse, probarse y revertirse.
 
-- Horizon OS: **23.0.1**
-- Atmosphère: **1.12.1**
-- Kefir: **927**
-- Entorno de pruebas: **emuMMC (E)**
+**Responsable del fork:** [Alexis-VsCode](https://github.com/Alexis-VsCode), mantenedor de esta edición comunitaria y promotor de las correcciones y mejoras desarrolladas en ella. La autoría del programa original pertenece a sus creadores; las contribuciones posteriores quedan diferenciadas en los commits y pull requests.
 
-Estas versiones son el objetivo de validación; **todavía no se ha confirmado funcionamiento del fork en una consola real**. No distribuimos Atmosphère, Kefir ni firmware de la consola.
+## Compatibilidad: referencia de validación
 
-## Funcionalidad heredada
+| Componente | Entorno de referencia | Estado |
+| --- | --- | --- |
+| Horizon OS | 23.0.1 | Pendiente de pruebas en consola |
+| Atmosphère | 1.12.1 | Pendiente de pruebas en consola |
+| Distribución | Kefir 927 | Pendiente de pruebas en consola |
+| Arranque | emuMMC (E) | Confirmado como entorno previsto |
+| Compilación C++ / devkitPro | GitHub Actions | Aprobada en la rama de modernización |
+| Pruebas de rutas ZIP y seguridad | GitHub Actions | Aprobadas en la rama de modernización |
 
-El instalador original incluye exploración de microSD, transferencia por USB y red local, así como procesamiento de archivos NSP/NSZ/XCI/XCZ. Son funcionalidades existentes en el código, no una certificación de este fork. Todo su comportamiento debe evaluarse antes de etiquetar una versión como estable.
+**Importante:** la compilación satisfactoria no demuestra compatibilidad funcional ni autoriza actualizar el firmware de la consola. No se ha certificado Horizon OS 23.5.0.
 
-## Mejoras en desarrollo
+[Guía de pruebas en Kefir 927](docs/PRUEBAS-KEFIR-927.md) · [Hoja de ruta y estado](docs/HOJA-DE-RUTA.md)
 
-- Verificación de certificados TLS para conexiones HTTP seguras.
-- Validación de límites y tamaños de los paquetes transferidos por USB.
-- Correcciones en gestión de errores de red y valores predeterminados conservadores.
-- Revisión de memoria, lectura de archivos y escritura en almacenamiento.
-- Actualizador ZIP y descargas externas de parches temporalmente deshabilitados mientras se implementan verificaciones de integridad y recuperación.
-- Automatización con GitHub Actions, devkitPro/libnx y Plutonium.
-- Documentación y sitio web en español, con compatibilidad declarada según pruebas.
+## Funcionalidad del proyecto original
 
-Consulta el [pull request de modernización](https://github.com/Alexis-VsCode/Awoo-Installer/pull/1) para revisar los cambios. Por seguridad, sigue en **borrador** hasta completar la compilación y las pruebas funcionales.
+El código heredado de Awoo contempla exploración de archivos en la tarjeta SD, transferencias por USB y LAN, descargas remotas y procesamiento de paquetes NSP, NSZ, XCI y XCZ. Esta relación es descriptiva; **no supone que todas esas funciones hayan sido verificadas en el fork ni en el firmware de referencia**.
 
-## Compilación y publicación
+Se recomienda utilizar únicamente software y contenido para el que se disponga de autorización. Esta edición no distribuye juegos, firmware, claves ni componentes de terceros para eludir medidas de seguridad.
 
-El proyecto utiliza C++17, devkitPro/devkitA64, libnx, SDL2 y Plutonium. El objetivo del flujo de integración es construir el `.nro` y comprobar su integridad. Para publicar una versión estable exigimos controles estáticos, compilación completa, revisión de código y validación en emuMMC real. Las futuras releases contendrán, según corresponda, `.nro`, `.zip`, hashes SHA-256 y notas de cambios.
+## Aportes de mantenimiento
 
-## Reportar un problema
+La rama [`feat/kefir-927-modernization`](https://github.com/Alexis-VsCode/Awoo-Installer/tree/feat/kefir-927-modernization) contiene las siguientes mejoras propuestas:
 
-Incluye firmware, Atmosphère, distribución CFW, emuMMC o sysMMC, método de apertura, pasos para reproducirlo y mensaje de error. No publiques secretos, claves ni contenido protegido.
+- Restablecimiento de validación TLS en las rutas de red revisadas.
+- Controles de tamaño de transferencia por USB y correcciones de errores de conexión.
+- Revisión del extractor ZIP, comprobación de rutas y pruebas de regresión.
+- Tratamiento conservador de opciones automáticas, configuración heredada y avisos localizados.
+- Compilación automatizada de Plutonium y Awoo mediante devkitPro, con publicación de artefactos de CI.
+- Validación automatizada de mensajes en español e inglés.
+
+Algunas funciones de actualización y descarga externa de parches permanecen **deshabilitadas temporalmente** durante el endurecimiento. Quedan pendientes revisiones adicionales de memoria, concurrencia, almacenamiento y compatibilidad de las API utilizadas por el instalador.
+
+El [**Pull Request #1**](https://github.com/Alexis-VsCode/Awoo-Installer/pull/1) es el registro de revisión técnica. Se mantiene en borrador hasta completar los criterios de aceptación.
+
+## Documentación
+
+| Documento | Contenido |
+| --- | --- |
+| [Compilación y CI](docs/COMPILACION.md) | Entorno de herramientas, submódulos, comandos y artefactos |
+| [Pruebas de compatibilidad](docs/PRUEBAS-KEFIR-927.md) | Casos de prueba, evidencias y rollback |
+| [Arquitectura y criterios técnicos](docs/ARQUITECTURA.md) | Stack, responsabilidades, riesgos y criterios de diseño |
+| [Hoja de ruta](docs/HOJA-DE-RUTA.md) | Fases, pendientes y condiciones para publicar |
+| [Historial de cambios](CHANGELOG.md) | Cambios propuestos y versiones publicadas |
+| [Guía de contribución](CONTRIBUTING.md) | Flujo de trabajo, calidad y revisión |
+| [Política de seguridad](SECURITY.md) | Reportes de vulnerabilidades y soporte |
 
 ## Créditos y agradecimientos
 
-Este proyecto **parte del trabajo de la comunidad original**. Queremos reconocer expresamente:
+**Awoo Installer existe gracias al trabajo de sus autores y colaboradores originales.** Este fork reconoce expresamente:
 
-- **[Huntereb](https://github.com/Huntereb)**, autor del repositorio y proyecto Awoo Installer.
-- **[HookedBehemoth](https://github.com/HookedBehemoth)**, responsable de numerosas contribuciones a Awoo Installer y componentes asociados.
-- **[Adubbz](https://github.com/Adubbz)** y colaboradores de [Tinfoil](https://github.com/Adubbz/Tinfoil), por la base técnica reutilizada.
-- **[XorTroll](https://github.com/XorTroll)** y colaboradores de [Plutonium](https://github.com/XorTroll/Plutonium), por la biblioteca de interfaz.
-- **nicoboss**, **blawar** y colaboradores del proyecto [NSZ](https://github.com/nicoboss/nsz).
-- Las comunidades **AtlasNX** y **RetroNX**, traductores y colaboradores que aportaron correcciones y reportes.
-- **namako8982**, acreditado en el proyecto original por sus recursos gráficos históricos.
+- **[Huntereb](https://github.com/Huntereb/Awoo-Installer):** autor del proyecto y repositorio original.
+- **[HookedBehemoth](https://github.com/HookedBehemoth):** contribuciones relevantes al desarrollo y mantenimiento de Awoo Installer.
+- **[Adubbz](https://github.com/Adubbz/Tinfoil)** y colaboradores de **Tinfoil:** componentes y código de referencia reutilizados por el proyecto original.
+- **[XorTroll](https://github.com/XorTroll/Plutonium)** y colaboradores de **Plutonium:** biblioteca de interfaz gráfica.
+- **blawar**, **nicoboss** y colaboradores de **NSZ:** aportes reconocidos por el proyecto original.
+- **[PabloPerezRodriguez](https://github.com/PabloPerezRodriguez):** contribución histórica a la traducción española, reconocida en las notas de la versión 1.3.4.
+- Comunidades **AtlasNX**, **RetroNX**, traductores, personas que reportaron errores y demás colaboradores documentados en el historial.
+- **[namako8982](https://www.pixiv.net/member.php?id=14235616):** recurso gráfico histórico acreditado en el README original. Esta edición usa una identidad visual diferente en su sitio web.
 
-Agradecemos a todas las personas que construyeron y mantuvieron Awoo Installer. Los créditos aquí mencionados son un resumen; **el historial completo y los avisos originales de licencia permanecen en el repositorio**.
+La lista es un reconocimiento resumido y **no sustituye el historial de contribuciones ni el README histórico**; ambos pueden consultarse en [el repositorio de origen](https://github.com/Huntereb/Awoo-Installer) y sus publicaciones. Agradecemos a todas las personas que hicieron posible el proyecto.
 
-**Responsable del mantenimiento de este fork:** [Alexis-VsCode](https://github.com/Alexis-VsCode). Sus aportes quedan registrados y diferenciados de la autoría original.
+### Mantenimiento de esta edición
 
-## Licencia y alcance
+**[Alexis-VsCode](https://github.com/Alexis-VsCode)** — responsable del fork, su dirección técnica, documentación, revisiones y continuidad. Los aportes nuevos se identifican por archivo, commit y pull request. Otros desarrolladores que contribuyan serán acreditados mediante el historial de GitHub.
 
-[GNU GPL v3.0](LICENSE). Proyecto comunitario independiente, sin fines de lucro ni afiliación con Nintendo, Kefir, Atmosphère o los desarrolladores originales. No distribuimos juegos, claves, firmware ni parches de terceros. Utiliza el software únicamente con contenido cuyo uso esté autorizado.
+## Licencias y transparencia
+
+Este repositorio conserva la licencia original [**GNU GPL-3.0**](LICENSE), así como los avisos aplicables a componentes heredados, incluido [Tinfoil.LICENSE](Tinfoil.LICENSE). El proyecto es independiente, sin fines de lucro y no está afiliado con Nintendo, Atmosphère, Kefir ni sus equipos.
+
+**Estado de distribución:** hasta que la revisión y las pruebas de hardware se completen, los archivos generados por CI son **artefactos experimentales**, no una release estable.

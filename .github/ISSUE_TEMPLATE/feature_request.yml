@@ -1,0 +1,21 @@
+name: Propuesta de mejora
+description: Sugiere una mejora incremental y comprobable.
+title: "[Mejora] "
+labels: ["enhancement"]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problema que resuelve
+    validations:
+      required: true
+  - type: textarea
+    id: solution
+    attributes:
+      label: Propuesta de solución
+    validations:
+      required: true
+  - type: textarea
+    id: risks
+    attributes:
+      label: Compatibilidad, riesgos y pruebas propuestas

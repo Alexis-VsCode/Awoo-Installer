@@ -1,0 +1,40 @@
+name: Reporte de error
+description: Informa un fallo reproducible sin compartir información sensible.
+title: "[Error] "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: "Gracias por colaborar. No compartas claves, tickets, firmware ni archivos protegidos."
+  - type: input
+    id: version
+    attributes:
+      label: Versión del instalador o commit
+      placeholder: SHA o versión exacta
+    validations:
+      required: true
+  - type: input
+    id: environment
+    attributes:
+      label: Entorno
+      description: HOS, AMS, Kefir y emuMMC/sysMMC
+      placeholder: "HOS 23.0.1 | AMS 1.12.1 | Kefir 927 | E"
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Pasos para reproducir
+      description: Describe acciones y archivos de prueba no protegidos
+    validations:
+      required: true
+  - type: textarea
+    id: result
+    attributes:
+      label: Resultado observado y esperado
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: Errores o registros anonimizados
