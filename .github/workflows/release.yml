@@ -1,0 +1,124 @@
+name: Preparar release comunitaria
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    name: Validación previa a distribución
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Comprobar seguridad y traducciones
+        run: |
+          set -euo pipefail
+          python3 scripts/check_security.py
+          python3 scripts/check_translations.py
+      - name: Ejecutar pruebas ZIP
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y libminizip-dev zlib1g-dev
+          g++ -std=c++17 -Wall -Wextra -Werror -Iinclude tests/zip_path.cpp -o /tmp/awoo-zip-path
+          /tmp/awoo-zip-path
+          g++ -std=c++17 -Wall -Wextra -Werror -Iinclude tests/zip_cli.cpp source/util/unzip.cpp -lminizip -lz -o /tmp/awoo-zip-cli
+          python3 scripts/test_zip_integration.py /tmp/awoo-zip-cli
+
+  build:
+    name: Compilar Nintendo Switch
+    needs: validate
+    runs-on: ubuntu-latest
+    container:
+      image: devkitpro/devkita64:20260219
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+          persist-credentials: false
+      - name: Verificar submódulo y compilar
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -f "$DEVKITPRO/libnx/switch_rules"
+          make -C include/Plutonium/Plutonium -f Makefile -j2
+          test -s include/Plutonium/Plutonium/Output/lib/libpu.a
+          make -j2
+          test -s Awoo-Installer.nro
+      - name: Conservar el binario para empaquetar
+        uses: actions/upload-artifact@v4
+        with:
+          name: awoo-community-nro
+          path: Awoo-Installer.nro
+          if-no-files-found: error
+          retention-days: 30
+
+  package:
+    name: Empaquetar ZIP y SHA-256
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/download-artifact@v4
+        with:
+          name: awoo-community-nro
+          path: dist
+      - name: Generar entregables verificables
+        run: |
+          set -euo pipefail
+          test -s dist/Awoo-Installer.nro
+          cp LICENSE README.md dist/
+          python3 - <<'PY'
+          from pathlib import Path
+          from zipfile import ZipFile, ZIP_DEFLATED
+          base = Path("dist")
+          with ZipFile(base / "Awoo-Installer.zip", "w", compression=ZIP_DEFLATED) as archive:
+              for name in ("Awoo-Installer.nro", "README.md", "LICENSE"):
+                  archive.write(base / name, arcname=name)
+          PY
+          cd dist
+          sha256sum Awoo-Installer.nro Awoo-Installer.zip > SHA256SUMS
+          sha256sum --check SHA256SUMS
+      - uses: actions/upload-artifact@v4
+        with:
+          name: awoo-community-distribution
+          path: |
+            dist/Awoo-Installer.nro
+            dist/Awoo-Installer.zip
+            dist/SHA256SUMS
+          if-no-files-found: error
+          retention-days: 30
+
+  draft-release:
+    name: Crear borrador de la release
+    needs: package
+    if: startsWith(github.ref, 'refs/tags/v')
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: awoo-community-distribution
+          path: dist
+      - name: Generar borrador (sin publicar automáticamente)
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          TAG: ${{ github.ref_name }}
+        run: |
+          set -euo pipefail
+          if gh release view "$TAG" >/dev/null 2>&1; then
+            echo "La release ya existe: no se sobrescribirá automáticamente."
+            exit 1
+          fi
+          gh release create "$TAG"             dist/Awoo-Installer.nro dist/Awoo-Installer.zip dist/SHA256SUMS             --draft --generate-notes --title "Awoo Installer Community $TAG"
+          echo "Borrador creado. Publicar solo después de las pruebas de hardware y revisión."
