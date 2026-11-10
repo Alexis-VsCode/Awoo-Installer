@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#141b17">
-  <meta name="description" content="Awoo Installer Community: código abierto, descargas oficiales del fork, actualizaciones y compatibilidad verificada.">
+  <meta name="description" content="Awoo Installer Community: código abierto, descargas oficiales del fork, actualizaciones y compatibilidad documentada.">
   <title>Awoo Installer Community — Descargas y documentación</title>
   <style>
     :root{color-scheme:dark;--bg:#111813;--surface:#1b261e;--border:#39483d;--accent:#c3e4a5;--text:#f3f5ef;--muted:#b5c4b6;--max:1100px}
@@ -19,7 +19,7 @@
     .screens{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-top:26px}
     .screen{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:18px;margin:0}
     .screen-crop{position:relative;overflow:hidden;border-radius:7px;background:#240000;height:270px}
-    .screen-crop img{display:block;width:100%;height:100%;object-fit:cover;object-position:center 73%;transform:scale(1.32);transform-origin:center 75%}
+    .screen-crop img{display:block;width:100%;height:100%;object-fit:contain;object-position:center 73%;}
     .screen figcaption{font-size:.84rem;color:var(--muted);margin-top:12px}
     @media(max-width:700px){.screens{grid-template-columns:1fr}.screen-crop{height:240px}}
     .eyebrow{text-transform:uppercase;font-weight:800;letter-spacing:.16em;font-size:.74rem;color:var(--accent)}
@@ -38,13 +38,50 @@
     .cards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;margin-top:28px}.cards article{background:var(--surface);border:1px solid var(--border);padding:24px;border-radius:10px}.cards p{color:var(--muted);margin:0}
     footer{border-top:1px solid var(--border);padding:30px 0 44px}.footer{display:flex;justify-content:space-between;flex-wrap:wrap;gap:18px;font-size:.88rem;color:var(--muted)}
     @media(max-width:700px){.container{padding-left:18px;padding-right:18px}.header{flex-direction:column;align-items:flex-start;padding-top:20px;padding-bottom:20px}.hero{padding-top:60px;padding-bottom:60px}.cards{grid-template-columns:1fr}.panel{padding:22px}.panelhead{align-items:flex-start}}
+
+    /* Componentes y distribución adaptables a escritorio, tablet y móvil. */
+    :root{--bg:#111813;--surface:#1b261e;--surface2:#233327;--border:#39483d;--accent:#c3e4a5;--text:#f3f5ef;--muted:#b5c4b6}
+    .header{height:auto;padding-top:18px;padding-bottom:18px}
+    nav{row-gap:10px}
+    section[id]{scroll-margin-top:24px}
+    .hero{background:radial-gradient(ellipse at 77% 10%,#365742 0%,#1d3125 39%,#111813 78%)}
+    .hero::before{opacity:.16}
+    .screen{min-width:0}
+    .screen-crop{display:grid;place-items:center;height:auto;aspect-ratio:16/9;background:#100e0c;border:1px solid #4b4b43}
+    .screen-crop img{width:100%;height:100%;max-height:420px;object-fit:contain;object-position:center;transform:none}
+    .screen figcaption{line-height:1.5}
+    .section-intro{max-width:790px;color:var(--muted)}
+    .resources{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:15px;margin:24px 0}
+    .resources a{display:block;padding:24px;border:1px solid var(--border);border-radius:12px;background:var(--surface);text-decoration:none;color:var(--text);min-height:150px}
+    .resources a:hover,.resources a:focus-visible{border-color:var(--accent);background:var(--surface2)}
+    .resources strong{display:block;font-size:1rem;margin-bottom:8px;color:var(--accent)}
+    .resources span{display:block;color:var(--muted);font-size:.88rem}
+    .activity-layout{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;margin-top:24px}
+    .activity-block{min-width:0;border:1px solid var(--border);background:var(--surface);border-radius:12px;padding:24px}
+    .activity-block h3{margin-bottom:12px}
+    .activity-list{list-style:none;margin:0;padding:0}
+    .activity-list li{border-top:1px solid var(--border);padding:12px 0}
+    .activity-list li:first-child{border-top:0}
+    .activity-list a{display:block;color:var(--text);text-decoration:none;font-weight:600;overflow-wrap:anywhere}
+    .activity-list a:hover{text-decoration:underline;color:var(--accent)}
+    .activity-meta{display:block;color:var(--muted);font-size:.81rem;margin-top:4px}
+    .activity-status{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin:18px 0}
+    .activity-status .status{border-color:var(--border);color:var(--accent)}
+    .community-note{font-size:.88rem;color:var(--muted);max-width:740px}
+    .button-quiet{min-height:42px;background:transparent;color:var(--text);border:1px solid #7b8d7b;border-radius:7px;padding:8px 15px;cursor:pointer;font:inherit;font-size:.88rem}
+    .button-quiet:hover,.button-quiet:focus-visible{border-color:var(--accent)}
+    .credits{background:linear-gradient(145deg,#233527,#19241c);border:1px solid var(--border);border-radius:14px;padding:30px}
+    .footer{gap:14px}
+    @media(max-width:920px){.resources{grid-template-columns:repeat(2,minmax(0,1fr))}.header{align-items:flex-start}.header nav{justify-content:flex-end}}
+    @media(max-width:700px){.screens,.activity-layout,.resources{grid-template-columns:1fr}.screen-crop{height:auto;aspect-ratio:16/9}.hero{padding-top:60px;padding-bottom:60px}.credits{padding:20px}.resources a{min-height:0}.header nav{justify-content:flex-start}.panel{margin-bottom:44px}}
+    @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
   </style>
 </head>
 <body>
   <header class="header container">
     <a class="logo" href="./">AWOO <span>COMMUNITY</span></a>
     <nav aria-label="Navegación principal">
-      <a href="#descargar">Descargas</a><a href="#compatibilidad">Compatibilidad</a><a href="#capturas">Capturas</a><a href="#mejoras">Mejoras</a>
+      <a href="#descargar">Descargas</a><a href="#compatibilidad">Compatibilidad</a><a href="#capturas">Capturas</a><a href="#mejoras">Mejoras</a><a href="#documentacion">Documentación</a><a href="#actividad">Actividad</a>
       <a href="https://github.com/Alexis-VsCode/Awoo-Installer">GitHub</a>
     </nav>
   </header>
@@ -69,7 +106,7 @@
     </section>
     <section class="container section" id="capturas">
       <div class="eyebrow">Interfaz original</div><h2>Así funciona Awoo Installer</h2>
-      <p class="muted">Referencias visuales históricas del instalador original. Estas capturas corresponden a versiones anteriores y no representan una nueva versión compilada de este fork. El sitio utiliza un diseño verde propio, sin mascotas ni ilustraciones de personajes.</p>
+      <p class="muted">Capturas históricas de Awoo Installer, publicadas por la comunidad. Se muestran completas, sin recortes ni distorsión, y se adaptan al tamaño de la pantalla. No corresponden a una versión nueva certificada de este fork.</p>
       <div class="screens">
         <figure class="screen"><div class="screen-crop"><img loading="lazy" src="https://i.imgur.com/B5UvrjV.jpg" alt="Interfaz histórica de Awoo Installer: navegador de carpetas y selección de archivos en la consola"></div><figcaption>Explorador de archivos y selección de elementos · Awoo Installer 1.1.0 · <a href="https://gbatemp.net/threads/awoo-installer-a-no-bullshit-nsp-nsz-xci-xcz-installer-based-on-tinfoil.551923/">Captura de referencia</a>.</figcaption></figure>
         <figure class="screen"><div class="screen-crop"><img loading="lazy" src="https://1.bp.blogspot.com/-J2DUeIIR_nI/XtM4bozkbcI/AAAAAAAAMKc/J0PmMMrYGlY0KTHRgbE42uBwaalSc1EQwCLcBGAsYHQ/s1600/2020053113155100-73613D3DAFC1266C593A5CFF85C3D01D.jpg" alt="Interfaz histórica de Awoo Installer: cuadro de selección de almacenamiento de instalación"></div><figcaption>Confirmación del almacenamiento · Awoo Installer 1.3.3 · <a href="https://yyoossk.blogspot.com/2019/11/nspnszawoo-installer.html">Captura de referencia</a>.</figcaption></figure>
@@ -77,9 +114,9 @@
     </section>
     <section class="container section" id="compatibilidad">
       <div class="eyebrow">Pruebas y alcance</div><h2>Compatibilidad documentada</h2>
-      <p class="muted">La siguiente matriz describe el estado de validación, no una promesa de funcionamiento. El entorno de referencia es Kefir 927 sobre emuMMC.</p>
+      <p class="muted">La compilación de la rama de modernización y las pruebas automáticas han terminado correctamente. La siguiente matriz distingue expresamente ese resultado de las verificaciones que aún faltan en una consola. El entorno de referencia es Kefir 927 sobre emuMMC.</p>
       <div class="tablewrap"><table><thead><tr><th>Firmware</th><th>Entorno</th><th>Estado de Awoo Community</th></tr></thead><tbody>
-        <tr><td>23.0.1</td><td>Atmosphère 1.12.1 · Kefir 927 · emuMMC</td><td>Pendiente de compilar y probar en hardware real</td></tr>
+        <tr><td>23.0.1</td><td>Atmosphère 1.12.1 · Kefir 927 · emuMMC</td><td>Compilación aprobada en CI; pruebas en consola pendientes</td></tr>
         <tr><td>23.0.1</td><td>Atmosphère 1.12.1 oficial</td><td>Pendiente de validación</td></tr>
         <tr><td>23.5.0</td><td>CFW sin soporte verificado para este proyecto</td><td>No validado; no actualizar para probar este fork</td></tr>
       </tbody></table></div>
@@ -93,44 +130,174 @@
         <article><h3>Colaboración abierta</h3><p>Historial upstream preservado, reportes reproducibles, documentación y reconocimiento de autores originales.</p></article>
       </div>
     </section>
-    <section class="container section">
+    
+    <section class="container section" id="documentacion" aria-labelledby="docs-title">
+      <div class="eyebrow">Documentación técnica</div><h2 id="docs-title">Guías para usuarios y colaboradores</h2>
+      <p class="section-intro">La documentación forma parte del propio repositorio. Cada actualización queda registrada en Git y puede revisarse o mejorarse mediante un pull request.</p>
+      <div class="resources">
+        <a href="https://github.com/Alexis-VsCode/Awoo-Installer/blob/master/docs/COMPILACION.md"><strong>Compilación y CI</strong><span>Dependencias, devkitPro, Plutonium y verificación del archivo NRO.</span></a>
+        <a href="https://github.com/Alexis-VsCode/Awoo-Installer/blob/master/docs/PRUEBAS-KEFIR-927.md"><strong>Pruebas en Kefir 927</strong><span>Casos de validación para 23.0.1, AMS 1.12.1 y emuMMC.</span></a>
+        <a href="https://github.com/Alexis-VsCode/Awoo-Installer/blob/master/docs/ARQUITECTURA.md"><strong>Arquitectura</strong><span>Stack, módulos, riesgos y decisiones de mantenimiento incremental.</span></a>
+        <a href="https://github.com/Alexis-VsCode/Awoo-Installer/blob/master/docs/HOJA-DE-RUTA.md"><strong>Hoja de ruta</strong><span>Hitos completados, correcciones pendientes y condiciones para publicar.</span></a>
+        <a href="https://github.com/Alexis-VsCode/Awoo-Installer/blob/master/CONTRIBUTING.md"><strong>Cómo contribuir</strong><span>Estándares de código, pruebas, revisión y atribución de cambios.</span></a>
+        <a href="https://github.com/Alexis-VsCode/Awoo-Installer/blob/master/CHANGELOG.md"><strong>Historial de cambios</strong><span>Mejoras propuestas y versiones realmente publicadas.</span></a>
+      </div>
+    </section>
+    <section class="container section" id="actividad" aria-labelledby="activity-title">
+      <div class="eyebrow">Datos públicos de GitHub</div>
+      <h2 id="activity-title">Actividad del proyecto</h2>
+      <p class="section-intro">Últimas revisiones, propuestas, incidencias y comentarios del repositorio. La información se consulta en GitHub al abrir esta página; los datos pueden tardar en actualizarse o quedar temporalmente limitados por su API pública.</p>
+      <div class="activity-status">
+        <span id="ci-badge" class="status" role="status">Consultando compilación...</span>
+        <a class="link" href="https://github.com/Alexis-VsCode/Awoo-Installer/actions">Ver todas las ejecuciones</a>
+        <button class="button-quiet" type="button" id="refresh-activity">Actualizar actividad</button>
+      </div>
+      <div class="activity-layout">
+        <article class="activity-block"><h3>Últimos cambios</h3><ul class="activity-list" id="activity-commits"><li class="muted">Consultando GitHub...</li></ul><a class="small" href="https://github.com/Alexis-VsCode/Awoo-Installer/commits/feat/kefir-927-modernization">Historial completo</a></article>
+        <article class="activity-block"><h3>Pull requests</h3><ul class="activity-list" id="activity-prs"><li class="muted">Consultando GitHub...</li></ul><a class="small" href="https://github.com/Alexis-VsCode/Awoo-Installer/pulls">Ver propuestas</a></article>
+        <article class="activity-block"><h3>Incidencias</h3><ul class="activity-list" id="activity-issues"><li class="muted">Consultando GitHub...</li></ul><a class="small" href="https://github.com/Alexis-VsCode/Awoo-Installer/issues">Ver incidencias</a></article>
+        <article class="activity-block"><h3>Últimos comentarios públicos</h3><ul class="activity-list" id="activity-comments"><li class="muted">Consultando GitHub...</li></ul><a class="small" href="https://github.com/Alexis-VsCode/Awoo-Installer/pulls/1">Participar en la revisión</a></article>
+      </div>
+    </section>
+    <section class="container section" id="creditos">
       <div class="eyebrow">Créditos y derechos</div><h2>Trabajo comunitario y licencia</h2>
-      <p class="muted">Fork comunitario mantenido por <a href="https://github.com/Alexis-VsCode">Alexis-VsCode</a> y basado en <a href="https://github.com/Huntereb/Awoo-Installer">Awoo Installer</a> de Huntereb. Agradecimientos a HookedBehemoth, Adubbz y colaboradores de Tinfoil, XorTroll y colaboradores de Plutonium, nicoboss, blawar, AtlasNX, RetroNX, traductores y todas las personas que contribuyeron al proyecto original. Se conservan el historial, la licencia GPL-3.0 y los avisos aplicables. Los cambios propios se identifican en los commits del fork. Utiliza únicamente software y archivos cuyo uso esté autorizado.</p>
+      <div class="credits"><p class="muted">Fork comunitario mantenido por <a href="https://github.com/Alexis-VsCode">Alexis-VsCode</a> y basado en <a href="https://github.com/Huntereb/Awoo-Installer">Awoo Installer</a> de Huntereb. Agradecimientos a HookedBehemoth, Adubbz y colaboradores de Tinfoil, XorTroll y colaboradores de Plutonium, nicoboss, blawar, AtlasNX, RetroNX, traductores y todas las personas que contribuyeron al proyecto original. Se conservan el historial, la licencia GPL-3.0 y los avisos aplicables. Los cambios propios se identifican en los commits del fork. Utiliza únicamente software y archivos cuyo uso esté autorizado.</p><p class="small muted">La dirección de mantenimiento de esta edición corresponde a Alexis-VsCode; la autoría de Awoo Installer original se conserva en su repositorio e historial. Las aportaciones nuevas se registran como commits y pull requests diferenciados.</p></div>
     </section>
   </main>
   <footer><div class="container footer"><span>Awoo Installer Community · Proyecto independiente GPL-3.0</span><a href="https://github.com/Alexis-VsCode/Awoo-Installer/issues">Reportar un problema</a></div></footer>
   <script>
   (() => {
     'use strict';
-    const base = 'https://github.com/Alexis-VsCode/Awoo-Installer/releases/download/';
-    const $ = (id) => document.getElementById(id);
-    const attach = (id,url) => {
-      if (typeof url !== 'string' || !url.startsWith(base)) return;
-      const el = $(id); el.href = url; el.classList.remove('hidden'); el.rel = 'noopener noreferrer';
+    const root = 'https://api.github.com/repos/Alexis-VsCode/Awoo-Installer';
+    const repo = 'https://github.com/Alexis-VsCode/Awoo-Installer';
+    const downloadBase = repo + '/releases/download/';
+    const get = (id) => document.getElementById(id);
+    const date = (value) => {
+      const parsed = new Date(value);
+      return Number.isFinite(parsed.getTime()) ? parsed.toLocaleDateString('es-EC',{day:'numeric',month:'short',year:'numeric'}) : 'Fecha no disponible';
     };
-    (async () => {
+    const approvedUrl = (url) => {
+      if (typeof url !== 'string') return false;
       try {
-        const response = await fetch('https://api.github.com/repos/Alexis-VsCode/Awoo-Installer/releases?per_page=15', {headers:{Accept:'application/vnd.github+json'}});
-        if (!response.ok) throw Error('API: ' + response.status);
-        const releases = await response.json();
-        const release = releases.find(r => !r.draft && Array.isArray(r.assets) && r.assets.some(a=>a.name==='Awoo-Installer.nro'));
+        const value = new URL(url);
+        return value.protocol === 'https:' && value.hostname === 'github.com' && value.pathname.startsWith('/Alexis-VsCode/Awoo-Installer/');
+      } catch (_) { return false; }
+    };
+    const showDownload = (id, url) => {
+      if (typeof url !== 'string' || !url.startsWith(downloadBase) || !approvedUrl(url)) return;
+      const anchor = get(id);
+      anchor.href = url;
+      anchor.classList.remove('hidden');
+      anchor.rel = 'noopener noreferrer';
+    };
+    const request = async (resource) => {
+      const response = await fetch(root + resource, {headers:{Accept:'application/vnd.github+json'}});
+      if (!response.ok) throw new Error('GitHub API ' + response.status);
+      return response.json();
+    };
+    const releaseInfo = async () => {
+      try {
+        const releases = await request('/releases?per_page=15');
+        if (!Array.isArray(releases)) throw Error('Formato de releases no válido');
+        const release = releases.find((r) => !r.draft && Array.isArray(r.assets) && r.assets.some(a => a.name === 'Awoo-Installer.nro'));
         if (!release) {
-          $('release-badge').textContent = 'Sin binarios del fork';
-          $('release-text').textContent = 'Todavía no se ha publicado un binario verificado de esta rama de mantenimiento. El código está disponible; consulta GitHub para seguir las compilaciones.';
+          get('release-badge').textContent = 'Sin release comunitaria';
+          get('release-text').textContent = 'Ya existe una compilación de prueba en GitHub Actions, pero todavía no una versión oficial del fork validada en hardware. Las descargas de pruebas se consultan en Actions.';
           return;
         }
-        $('release-badge').textContent = release.prerelease ? 'Versión de prueba · NO CERTIFICADA' : 'Versión publicada';
-        $('release-text').textContent = (release.name || release.tag_name) + ' · ' + new Date(release.published_at).toLocaleDateString('es-EC') + ' · Verifica el estado de compatibilidad antes de instalar.';
-        for (const a of release.assets) {
-          if(a.name==='Awoo-Installer.nro') attach('download-nro',a.browser_download_url);
-          if(a.name==='Awoo-Installer.zip') attach('download-zip',a.browser_download_url);
-          if(a.name==='SHA256SUMS') attach('download-sha',a.browser_download_url);
+        get('release-badge').textContent = release.prerelease ? 'Versión de prueba' : 'Versión publicada';
+        get('release-text').textContent = (release.name || release.tag_name) + ' · ' + date(release.published_at) + ' · Comprueba compatibilidad y notas antes de utilizarla.';
+        for (const asset of release.assets) {
+          if (asset.name === 'Awoo-Installer.nro') showDownload('download-nro', asset.browser_download_url);
+          if (asset.name === 'Awoo-Installer.zip') showDownload('download-zip', asset.browser_download_url);
+          if (asset.name === 'SHA256SUMS') showDownload('download-sha', asset.browser_download_url);
         }
       } catch (_) {
-        $('release-badge').textContent = 'Consulta no disponible';
-        $('release-text').textContent = 'GitHub no respondió. Consulta el historial de releases del repositorio para ver las descargas.';
+        get('release-badge').textContent = 'Consulta temporalmente no disponible';
+        get('release-text').textContent = 'No fue posible consultar las releases. Puedes revisar el historial directamente desde GitHub.';
       }
-    })();
+    };
+    const fillList = (id, items, format, empty) => {
+      const target = get(id);
+      target.replaceChildren();
+      if (!Array.isArray(items) || items.length === 0) {
+        const item = document.createElement('li');
+        item.className = 'muted';
+        item.textContent = empty;
+        target.appendChild(item);
+        return;
+      }
+      for (const datum of items.slice(0, 4)) {
+        const data = format(datum);
+        if (!approvedUrl(data.url)) continue;
+        const item = document.createElement('li');
+        const link = document.createElement('a');
+        link.href = data.url;
+        link.rel = 'noopener noreferrer';
+        link.textContent = data.title;
+        item.appendChild(link);
+        const meta = document.createElement('span');
+        meta.className = 'activity-meta';
+        meta.textContent = data.meta;
+        item.appendChild(meta);
+        target.appendChild(item);
+      }
+      if (!target.children.length) {
+        const item = document.createElement('li');
+        item.textContent = empty;
+        target.appendChild(item);
+      }
+    };
+    const runActivity = async () => {
+      const refresh = get('refresh-activity');
+      refresh.disabled = true;
+      const tasks = [
+        {
+          id:'activity-commits',endpoint:'/commits?sha=feat%2Fkefir-927-modernization&per_page=4',
+          format:c => ({title:(c.commit?.message || 'Cambio sin descripción').split('\n')[0],url:c.html_url,meta:(c.sha||'').slice(0,7)+' · '+date(c.commit?.committer?.date)}),
+          empty:'Todavía no se dispone de cambios consultables.'
+        },
+        {
+          id:'activity-prs',endpoint:'/pulls?state=open&sort=updated&direction=desc&per_page=4',
+          format:p => ({title:'#'+p.number+' · '+p.title,url:p.html_url,meta:(p.draft?'En revisión':'Abierto')+' · '+date(p.updated_at)}),
+          empty:'No hay pull requests abiertos.'
+        },
+        {
+          id:'activity-issues',endpoint:'/issues?state=open&sort=updated&direction=desc&per_page=10',
+          filter:issues=>issues.filter(i=>!i.pull_request),
+          format:i => ({title:'#'+i.number+' · '+i.title,url:i.html_url,meta:(i.comments||0)+' comentarios · '+date(i.updated_at)}),
+          empty:'No se han registrado incidencias abiertas.'
+        },
+        {
+          id:'activity-comments',endpoint:'/issues/comments?sort=updated&direction=desc&per_page=4',
+          format:c => ({title:(c.body||'Comentario público').replace(/\s+/g,' ').slice(0,130),url:c.html_url,meta:(c.user?.login||'Colaborador')+' · '+date(c.created_at)}),
+          empty:'No hay comentarios públicos recientes.'
+        }
+      ];
+      await Promise.all(tasks.map(async task => {
+        try {
+          const data = await request(task.endpoint);
+          const selected = task.filter ? task.filter(data) : data;
+          fillList(task.id, selected, task.format, task.empty);
+        } catch (_) {
+          fillList(task.id, [], ()=>({}), 'No disponible por el momento. Consulta GitHub directamente.');
+        }
+      }));
+      try {
+        const data = await request('/actions/runs?branch=feat%2Fkefir-927-modernization&per_page=5');
+        const run = data.workflow_runs?.find(r => r.name === 'C++ compatibility and security checks');
+        const label = run?.status === 'completed'
+          ? (run.conclusion === 'success' ? 'CI: compilación y pruebas aprobadas' : 'CI: última ejecución requiere revisión')
+          : (run ? 'CI: ejecución en curso' : 'CI: sin ejecuciones recientes');
+        get('ci-badge').textContent = label;
+      } catch (_) {
+        get('ci-badge').textContent = 'CI: consulta no disponible';
+      }
+      refresh.disabled = false;
+    };
+    get('refresh-activity').addEventListener('click', runActivity);
+    releaseInfo();
+    runActivity();
   })();
   </script>
 </body></html>
