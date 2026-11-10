@@ -28,7 +28,8 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          dkp-pacman -Syu --noconfirm
+          # Use packages preinstalled in the pinned devkitPro container.
+          # Avoid unaudited package upgrades at build time.
           test -f "$DEVKITPRO/libnx/switch_rules"
           make -C include/Plutonium/Plutonium -f Makefile.switch -j2
           test -s include/Plutonium/Plutonium/Output-switch/lib/libpu.a

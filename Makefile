@@ -76,7 +76,7 @@ LIBS	+=	-lmbedtls -lmbedcrypto -lminizip -lzstd # Memes
 # list of directories containing libraries, this must be the top level containing
 # include and lib
 #---------------------------------------------------------------------------------
-LIBDIRS	:= $(PORTLIBS) $(LIBNX) $(CURDIR)/include/Plutonium/Plutonium/Output
+LIBDIRS	:= $(PORTLIBS) $(LIBNX) $(CURDIR)/include/Plutonium/Plutonium/Output-switch
 
 
 #---------------------------------------------------------------------------------
@@ -174,7 +174,7 @@ all: $(BUILD)
 $(BUILD):
 	@[ -d $@ ] || mkdir -p $@
 	#comment this out if you are hacking on the code or compilation will take forever
-	$(MAKE) --no-print-directory -C include/Plutonium -f Makefile lib
+	$(MAKE) --no-print-directory -C include/Plutonium/Plutonium -f Makefile.switch
 	@$(MAKE) --no-print-directory -C $(BUILD) -f $(CURDIR)/Makefile
 
 #---------------------------------------------------------------------------------
