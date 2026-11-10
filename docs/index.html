@@ -13,7 +13,15 @@
     .container{max-width:var(--max);margin:auto;padding:0 28px}.header{min-height:82px;display:flex;align-items:center;justify-content:space-between;gap:18px;border-bottom:1px solid var(--border)}
     .logo{font-weight:850;letter-spacing:.11em;text-decoration:none;color:var(--text)}.logo span{color:var(--accent);font-weight:500}
     nav{display:flex;gap:22px;flex-wrap:wrap}nav a{font-size:.88rem;color:var(--muted);text-decoration:none}nav a:hover{color:var(--accent)}
-    .hero{padding-top:94px;padding-bottom:86px;background:radial-gradient(circle at 90% 0%,#31513988 0%,transparent 48%)}
+    .hero{position:relative;isolation:isolate;overflow:hidden;padding-top:94px;padding-bottom:86px;background:radial-gradient(ellipse at 80% 20%,#2f5238 0%,#19291e 40%,#111813 78%)}
+    .hero::before{content:"";position:absolute;z-index:-1;inset:0;opacity:.22;pointer-events:none;background-image:linear-gradient(to right,#9bd08d33 1px,transparent 1px),linear-gradient(to bottom,#9bd08d33 1px,transparent 1px);background-size:44px 44px;mask-image:linear-gradient(to left,black,transparent 86%)}
+    .hero::after{content:"";position:absolute;right:-160px;top:-300px;width:700px;height:700px;border:1px solid #a4dba838;border-radius:50%;box-shadow:0 0 0 85px #91c99808,0 0 0 175px #91c99808;pointer-events:none;z-index:-1}
+    .screens{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-top:26px}
+    .screen{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:18px;margin:0}
+    .screen-crop{position:relative;overflow:hidden;border-radius:7px;background:#240000;height:270px}
+    .screen-crop img{display:block;width:100%;height:100%;object-fit:cover;object-position:center 73%;transform:scale(1.32);transform-origin:center 75%}
+    .screen figcaption{font-size:.84rem;color:var(--muted);margin-top:12px}
+    @media(max-width:700px){.screens{grid-template-columns:1fr}.screen-crop{height:240px}}
     .eyebrow{text-transform:uppercase;font-weight:800;letter-spacing:.16em;font-size:.74rem;color:var(--accent)}
     h1{font-size:clamp(2.8rem,6vw,5.3rem);letter-spacing:-.055em;line-height:1.08;margin:24px 0;max-width:920px}h1 em{color:var(--accent);font-style:normal}
     .lead{font-size:1.2rem;color:var(--muted);max-width:740px}p{margin-top:0}
@@ -36,15 +44,15 @@
   <header class="header container">
     <a class="logo" href="./">AWOO <span>COMMUNITY</span></a>
     <nav aria-label="Navegación principal">
-      <a href="#descargar">Descargas</a><a href="#compatibilidad">Compatibilidad</a><a href="#mejoras">Proyecto</a>
+      <a href="#descargar">Descargas</a><a href="#compatibilidad">Compatibilidad</a><a href="#capturas">Capturas</a><a href="#mejoras">Mejoras</a>
       <a href="https://github.com/Alexis-VsCode/Awoo-Installer">GitHub</a>
     </nav>
   </header>
   <main>
     <div class="hero"><div class="container">
       <div class="eyebrow">Proyecto comunitario · GPL-3.0 · Sin fines de lucro</div>
-      <h1>Homebrew abierto.<br><em>Mantenimiento verificable.</em></h1>
-      <p class="lead">Un fork de Awoo Installer enfocado en seguridad, compatibilidad, estabilidad y compilaciones reproducibles. Construido sobre el trabajo de Huntereb y la comunidad.</p>
+      <h1>Awoo Installer.<br><em>Continuidad comunitaria.</em></h1>
+      <p class="lead">Una continuidad del proyecto original enfocada en corregir fallos, mejorar la compatibilidad y publicar versiones verificables. Código abierto, documentación clara y mantenimiento transparente.</p>
       <div class="buttons"><a class="btn primary" href="#descargar">Ver descargas</a><a class="btn secondary" href="https://github.com/Alexis-VsCode/Awoo-Installer">Explorar el código</a></div>
       <p class="muted small">Proyecto independiente, no oficial ni afiliado con Nintendo, Atmosphère, Kefir o el equipo original de Awoo. Sin distribución de juegos, claves, firmware ni parches de terceros.</p>
     </div></div>
@@ -58,6 +66,14 @@
         <a class="link" href="https://github.com/Alexis-VsCode/Awoo-Installer/releases">Todas las releases</a>
       </div>
       <p class="small muted">Cada descarga debe proceder de una release propia y contener sus checksums. La compilación por sí sola no certifica compatibilidad con una consola real.</p>
+    </section>
+    <section class="container section" id="capturas">
+      <div class="eyebrow">Interfaz original</div><h2>Así funciona Awoo Installer</h2>
+      <p class="muted">Referencias visuales históricas del instalador original. Estas capturas corresponden a versiones anteriores y no representan una nueva versión compilada de este fork. El sitio utiliza un diseño verde propio, sin mascotas ni ilustraciones de personajes.</p>
+      <div class="screens">
+        <figure class="screen"><div class="screen-crop"><img loading="lazy" src="https://i.imgur.com/B5UvrjV.jpg" alt="Interfaz histórica de Awoo Installer: navegador de carpetas y selección de archivos en la consola"></div><figcaption>Explorador de archivos y selección de elementos · Awoo Installer 1.1.0 · <a href="https://gbatemp.net/threads/awoo-installer-a-no-bullshit-nsp-nsz-xci-xcz-installer-based-on-tinfoil.551923/">Captura de referencia</a>.</figcaption></figure>
+        <figure class="screen"><div class="screen-crop"><img loading="lazy" src="https://1.bp.blogspot.com/-J2DUeIIR_nI/XtM4bozkbcI/AAAAAAAAMKc/J0PmMMrYGlY0KTHRgbE42uBwaalSc1EQwCLcBGAsYHQ/s1600/2020053113155100-73613D3DAFC1266C593A5CFF85C3D01D.jpg" alt="Interfaz histórica de Awoo Installer: cuadro de selección de almacenamiento de instalación"></div><figcaption>Confirmación del almacenamiento · Awoo Installer 1.3.3 · <a href="https://yyoossk.blogspot.com/2019/11/nspnszawoo-installer.html">Captura de referencia</a>.</figcaption></figure>
+      </div>
     </section>
     <section class="container section" id="compatibilidad">
       <div class="eyebrow">Pruebas y alcance</div><h2>Compatibilidad documentada</h2>
@@ -79,7 +95,7 @@
     </section>
     <section class="container section">
       <div class="eyebrow">Créditos y derechos</div><h2>Trabajo comunitario y licencia</h2>
-      <p class="muted">Fork basado en <a href="https://github.com/Huntereb/Awoo-Installer">Awoo Installer</a> de Huntereb, con aportes relevantes de HookedBehemoth, Adubbz, XorTroll y otros colaboradores. Se conservan el historial original, la licencia GPL-3.0 y los avisos aplicables. Utiliza exclusivamente software y contenido cuyo uso e instalación estén autorizados.</p>
+      <p class="muted">Fork comunitario mantenido por <a href="https://github.com/Alexis-VsCode">Alexis-VsCode</a> y basado en <a href="https://github.com/Huntereb/Awoo-Installer">Awoo Installer</a> de Huntereb. Agradecimientos a HookedBehemoth, Adubbz y colaboradores de Tinfoil, XorTroll y colaboradores de Plutonium, nicoboss, blawar, AtlasNX, RetroNX, traductores y todas las personas que contribuyeron al proyecto original. Se conservan el historial, la licencia GPL-3.0 y los avisos aplicables. Los cambios propios se identifican en los commits del fork. Utiliza únicamente software y archivos cuyo uso esté autorizado.</p>
     </section>
   </main>
   <footer><div class="container footer"><span>Awoo Installer Community · Proyecto independiente GPL-3.0</span><a href="https://github.com/Alexis-VsCode/Awoo-Installer/issues">Reportar un problema</a></div></footer>
