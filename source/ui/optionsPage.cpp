@@ -53,26 +53,10 @@ namespace inst::ui {
     }
 
     void optionsPage::askToUpdate(std::vector<std::string> updateInfo) {
-            if (!mainApp->CreateShowDialog("options.update.title"_lang, "options.update.desc0"_lang + updateInfo[0] + "options.update.desc1"_lang, {"options.update.opt0"_lang, "common.cancel"_lang}, false)) {
-                inst::ui::instPage::loadInstallScreen();
-                inst::ui::instPage::setTopInstInfoText("options.update.top_info"_lang + updateInfo[0]);
-                inst::ui::instPage::setInstBarPerc(0);
-                inst::ui::instPage::setInstInfoText("options.update.bot_info"_lang + updateInfo[0]);
-                try {
-                    std::string downloadName = inst::config::appDir + "/temp_download.zip";
-                    inst::curl::downloadFile(updateInfo[1], downloadName.c_str(), 0, true);
-                    romfsExit();
-                    inst::ui::instPage::setInstInfoText("options.update.bot_info2"_lang + updateInfo[0]);
-                    inst::zip::extractFile(downloadName, "sdmc:/");
-                    std::filesystem::remove(downloadName);
-                    mainApp->CreateShowDialog("options.update.complete"_lang, "options.update.end_desc"_lang, {"common.ok"_lang}, false);
-                } catch (...) {
-                    mainApp->CreateShowDialog("options.update.failed"_lang, "options.update.end_desc"_lang, {"common.ok"_lang}, false);
-                }
-                mainApp->FadeOut();
-                mainApp->Close();
-            }
-        return;
+        (void)updateInfo;
+        mainApp->CreateShowDialog("Community preview",
+            "Automatic updates are unavailable in this preview. Use manually verified GitHub releases.",
+            {"common.ok"_lang}, true);
     }
 
     std::string optionsPage::getMenuOptionIcon(bool ourBool) {

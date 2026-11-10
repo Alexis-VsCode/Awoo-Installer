@@ -1,0 +1,47 @@
+name: C++ compatibility and security checks
+on:
+  push:
+    branches: [master, 'feat/**']
+  pull_request:
+    branches: [master]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check source safety invariants
+        run: python3 scripts/check_security.py
+  switch:
+    needs: audit
+    runs-on: ubuntu-latest
+    container:
+      image: devkitpro/devkita64:20260219
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+          persist-credentials: false
+      - name: Verify toolchain and compile dependencies
+        shell: bash
+        run: |
+          set -euo pipefail
+          dkp-pacman -Syu --noconfirm
+          test -f "$DEVKITPRO/libnx/switch_rules"
+          make -C include/Plutonium/Plutonium -f Makefile.switch -j2
+          test -s include/Plutonium/Plutonium/Output-switch/lib/libpu.a
+      - name: Compile application
+        shell: bash
+        run: |
+          set -euo pipefail
+          make -j2
+          test -s Awoo-Installer.nro
+      - name: Archive NRO for review
+        uses: actions/upload-artifact@v4
+        with:
+          name: Awoo-Installer-ci-${{ github.sha }}
+          path: Awoo-Installer.nro
+          if-no-files-found: error
+          retention-days: 14

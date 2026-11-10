@@ -61,7 +61,7 @@ namespace netInstStuff{
         // Create a socket
         m_serverSocket = socket(AF_INET, SOCK_STREAM, IPPROTO_IP);
 
-        if (m_serverSocket < -1)
+        if (m_serverSocket < 0)
         {
             THROW_FORMAT("Failed to create a server socket. Error code: %u\n", errno);
         }

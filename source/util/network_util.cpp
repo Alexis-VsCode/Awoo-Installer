@@ -87,7 +87,8 @@ namespace tin::network
 
         curl_easy_setopt(curl, CURLOPT_URL, m_url.c_str());
         curl_easy_setopt(curl, CURLOPT_NOBODY, true);
-        curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, false);
+        curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, 1L);
+        curl_easy_setopt(curl, CURLOPT_SSL_VERIFYHOST, 2L);
         curl_easy_setopt(curl, CURLOPT_USERAGENT, "tinfoil");
         curl_easy_setopt(curl, CURLOPT_HEADERDATA, this);
         curl_easy_setopt(curl, CURLOPT_HEADERFUNCTION, &tin::network::HTTPHeader::ParseHTMLHeader);
@@ -143,7 +144,8 @@ namespace tin::network
 
             curl_easy_setopt(curl, CURLOPT_URL, m_url.c_str());
             curl_easy_setopt(curl, CURLOPT_NOBODY, true);
-            curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, false);
+            curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, 1L);
+        curl_easy_setopt(curl, CURLOPT_SSL_VERIFYHOST, 2L);
             curl_easy_setopt(curl, CURLOPT_USERAGENT, "tinfoil");
             curl_easy_setopt(curl, CURLOPT_RANGE, "0-0");
 
@@ -217,7 +219,8 @@ namespace tin::network
         auto range = ss.str();
 
         curl_easy_setopt(curl, CURLOPT_URL, m_url.c_str());
-        curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, false);
+        curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, 1L);
+        curl_easy_setopt(curl, CURLOPT_SSL_VERIFYHOST, 2L);
         curl_easy_setopt(curl, CURLOPT_USERAGENT, "tinfoil");
         curl_easy_setopt(curl, CURLOPT_RANGE, range.c_str());
         curl_easy_setopt(curl, CURLOPT_WRITEDATA, &writeDataFunc);
@@ -289,7 +292,8 @@ namespace tin::network
         curl_easy_setopt(curl, CURLOPT_URL, url.c_str());
         curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, "DROP");
         curl_easy_setopt(curl, CURLOPT_USERAGENT, "tinfoil");
-        curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, false);
+        curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, 1L);
+        curl_easy_setopt(curl, CURLOPT_SSL_VERIFYHOST, 2L);
         curl_easy_setopt(curl, CURLOPT_TIMEOUT_MS, 50); 
 
         curl_easy_perform(curl); // ignore returning value
