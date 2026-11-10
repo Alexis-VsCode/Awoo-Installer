@@ -12,8 +12,14 @@ using json = nlohmann::json;
 
 namespace Language {
     json lang;
+    json fallbackLang;
 
     void Load() {
+        std::ifstream fallbackFile("romfs:/lang/en.json");
+        if (fallbackFile.good()) {
+            fallbackLang = json::parse(fallbackFile, nullptr, false);
+            if (fallbackLang.is_discarded()) fallbackLang = json::object();
+        }
         std::ifstream ifs;
         std::string languagePath;
         int langInt = inst::config::languageSetting;
@@ -91,8 +97,11 @@ namespace Language {
         std::istringstream ss(key);
         std::string token;
 
-        while (std::getline(ss, token, '.') && j != nullptr) {
-            j = j[token];
+        while (std::getline(ss, token, '.')) {
+            if (!j.is_object()) return nullptr;
+            const auto it = j.find(token);
+            if (it == j.end()) return nullptr;
+            j = *it;
         }
 
         return j;
@@ -100,9 +109,8 @@ namespace Language {
 
     std::string LanguageEntry(std::string key) {
         json j = GetRelativeJson(lang, key);
-        if (j == nullptr) {
-            return "didn't find: " + key;
-        }
+        if (!j.is_string()) j = GetRelativeJson(fallbackLang, key);
+        if (!j.is_string()) return "Traducción no disponible: " + key;
         return j.get<std::string>();
     }
 

@@ -43,7 +43,7 @@ SOURCES		:=	source source/ui source/data source/install source/nx source/nx/ipc 
 DATA		:=	data
 INCLUDES	:=	include include/ui include/data include/install include/nx include/nx/ipc include/util include/Plutonium/Plutonium/Output/include
 APP_TITLE	:=	Awoo Installer
-APP_AUTHOR	:=	Huntereb & Behemoth
+APP_AUTHOR	:=	Huntereb, Behemoth & Alexis-VsCode
 APP_VERSION	?=	1.3.6-community.1
 ROMFS		:=	romfs
 

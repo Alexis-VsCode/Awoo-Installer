@@ -13,8 +13,8 @@ namespace inst::ui {
 
 namespace sig {
     void installSigPatches () {
-        inst::ui::mainApp->CreateShowDialog("Community preview",
-            "External patch downloads are disabled in this preview. Manage system components separately.",
+        inst::ui::mainApp->CreateShowDialog("community.title"_lang,
+            "community.patches_disabled"_lang,
             {"common.ok"_lang}, true);
     }
 }

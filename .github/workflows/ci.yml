@@ -13,7 +13,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Check source safety invariants
-        run: python3 scripts/check_security.py
+        run: |
+          python3 scripts/check_security.py
+          python3 scripts/check_translations.py
   switch:
     needs: audit
     runs-on: ubuntu-latest

@@ -54,8 +54,8 @@ namespace inst::ui {
 
     void optionsPage::askToUpdate(std::vector<std::string> updateInfo) {
         (void)updateInfo;
-        mainApp->CreateShowDialog("Community preview",
-            "Automatic updates are unavailable in this preview. Use manually verified GitHub releases.",
+        mainApp->CreateShowDialog("community.title"_lang,
+            "community.update_disabled"_lang,
             {"common.ok"_lang}, true);
     }
 
