@@ -16,6 +16,19 @@ jobs:
         run: |
           python3 scripts/check_security.py
           python3 scripts/check_translations.py
+  zip-security:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install native ZIP development headers
+        run: sudo apt-get update -qq && sudo apt-get install -y libminizip-dev zlib1g-dev
+      - name: Compile and test ZIP extraction
+        run: |
+          set -euo pipefail
+          g++ -std=c++17 -Wall -Wextra -Werror -Iinclude tests/zip_path.cpp -o /tmp/awoo-zip-path
+          /tmp/awoo-zip-path
+          g++ -std=c++17 -Wall -Wextra -Werror -Iinclude tests/zip_cli.cpp source/util/unzip.cpp -lminizip -lz -o /tmp/awoo-zip-cli
+          python3 scripts/test_zip_integration.py /tmp/awoo-zip-cli
   switch:
     needs: audit
     runs-on: ubuntu-latest

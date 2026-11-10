@@ -1,159 +1,134 @@
+// Safe ZIP extraction for Awoo Installer Community.
+// Original ZIP handling in Awoo referenced AtlasNX/Kosmos-Updater FileManager.
+#include "util/unzip.hpp"
+#include "util/safe_zip_path.hpp"
 #include <minizip/unzip.h>
-#include <algorithm>
-#include <dirent.h>
-#include <string>
+#include <array>
+#include <cerrno>
+#include <cstdio>
 #include <cstring>
-#include <switch.h>
+#include <fcntl.h>
+#include <set>
+#include <string>
 #include <sys/stat.h>
 #include <unistd.h>
 
-// https://github.com/AtlasNX/Kosmos-Updater/blob/master/source/FileManager.cpp
+namespace {
+constexpr size_t kMaxName = 1024;
+constexpr size_t kMaxEntries = 4096;
+constexpr unsigned long long kMaxFileBytes = 64ULL * 1024 * 1024;
+constexpr unsigned long long kMaxArchiveBytes = 256ULL * 1024 * 1024;
 
-unz_file_info_s * _getFileInfo(unzFile unz) {
-    unz_file_info_s * fileInfo = (unz_file_info_s*) malloc(sizeof(unz_file_info_s));
-    unzGetCurrentFileInfo(unz, fileInfo, NULL, 0, NULL, 0, NULL, 0);
-    return fileInfo;
+bool validInfo(const unz_file_info& info, const std::string& name) {
+    if (!inst::zip::isSafeRelativePath(name)) return false;
+    const mode_t type = static_cast<mode_t>((info.external_fa >> 16) & S_IFMT);
+    if (type != 0 && type != S_IFREG && type != S_IFDIR) return false;
+    if (info.uncompressed_size > kMaxFileBytes) return false;
+    if (name.back() == '/' && info.uncompressed_size != 0) return false;
+    if (type == S_IFDIR && name.back() != '/') return false;
+    return true;
 }
 
-std::string _getFullFileName(unzFile unz, unz_file_info_s * fileInfo) {
-    char filePath[fileInfo->size_filename + 1];
-    
-    unzGetCurrentFileInfo(unz, fileInfo, filePath, fileInfo->size_filename, NULL, 0, NULL, 0);
-    filePath[fileInfo->size_filename] = '\0';
-    
-    std::string path(filePath);
-    path.resize(fileInfo->size_filename);
-
-    return path;
+bool fileInfo(unzFile archive, unz_file_info& info, std::string& name) {
+    if (unzGetCurrentFileInfo(archive, &info, nullptr, 0, nullptr, 0, nullptr, 0) != UNZ_OK) return false;
+    if (info.size_filename == 0 || info.size_filename > kMaxName) return false;
+    std::array<char, kMaxName + 1> chars{};
+    if (unzGetCurrentFileInfo(archive, &info, chars.data(), static_cast<uLong>(chars.size()), nullptr, 0, nullptr, 0) != UNZ_OK) return false;
+    name.assign(chars.data(), static_cast<size_t>(info.size_filename));
+    return validInfo(info, name);
 }
 
-bool _makeDirectoryParents(std::string path)
-{
-    bool bSuccess = false;
-    int nRC = ::mkdir(path.c_str(), 0775);
-    if(nRC == -1)
-    {
-        switch(errno)
-        {
-            case ENOENT:
-                //parent didn't exist, try to create it
-                if( _makeDirectoryParents(path.substr(0, path.find_last_of('/'))))
-                    //Now, try to create again.
-                    bSuccess = 0 == ::mkdir(path.c_str(), 0775);
-                else
-                    bSuccess = false;
-                break;
-            case EEXIST:
-                //Done!
-                bSuccess = true;
-                break;
-            default:
-                bSuccess = false;
-                break;
-        }
-    }
-    else
-        bSuccess = true;
-    
-    return bSuccess;
+bool existingDirectory(const std::string& path) {
+    struct stat info{};
+    return stat(path.c_str(), &info) == 0 && S_ISDIR(info.st_mode);
 }
 
-int _extractFile(const char * path, unzFile unz, unz_file_info_s * fileInfo) {
-    //check to make sure filepath or fileInfo isnt null
-    if (path == NULL || fileInfo == NULL)
-        return -1;
-        
-    if (unzOpenCurrentFile(unz) != UNZ_OK)
-        return -2;
-    
-    char folderPath[strlen(path) + 1];
-    strcpy(folderPath, path);
-    char * pos = strrchr(folderPath, '/');
-    if (pos != NULL) {
-        *pos = '\0';
-        _makeDirectoryParents(std::string(folderPath));
+bool createParentDirectories(const std::string& path) {
+    for (size_t offset = 0; (offset = path.find('/', offset)) != std::string::npos; ++offset) {
+        const std::string prefix = path.substr(0, offset);
+        if (prefix.empty() || prefix.back() == ':') continue;
+        if (mkdir(prefix.c_str(), 0775) != 0 && (errno != EEXIST || !existingDirectory(prefix))) return false;
     }
-    
-    u32 blocksize = 0x8000;
-    u8 * buffer = (u8*) malloc(blocksize);
-    if (buffer == NULL)
-        return -3;
-    u32 done = 0;
-    int writeBytes = 0;
-    FILE * fp = fopen(path, "w");
-    if (fp == NULL) {
-        free(buffer);
-        return -4;		
+    return true;
+}
+
+bool extractMember(unzFile archive, const std::string& path, const unz_file_info& info) {
+    if (!createParentDirectories(path)) return false;
+    if (path.back() == '/') {
+        return mkdir(path.c_str(), 0775) == 0 || (errno == EEXIST && existingDirectory(path));
     }
-        
-    while (done < fileInfo->uncompressed_size) {
-        if (done + blocksize > fileInfo->uncompressed_size) {
-            blocksize = fileInfo->uncompressed_size - done;
-        }
-        unzReadCurrentFile(unz, buffer, blocksize);
-        writeBytes = write(fileno(fp), buffer, blocksize);
-        if (writeBytes <= 0) {
+    struct stat existing{};
+    if (lstat(path.c_str(), &existing) == 0) return false;
+    if (errno != ENOENT) return false;
+
+    const std::string staging = path + ".awoo-extract-part";
+    const int fd = open(staging.c_str(), O_WRONLY | O_CREAT | O_EXCL, 0664);
+    if (fd < 0) return false;
+    FILE* file = fdopen(fd, "wb");
+    if (!file) { close(fd); std::remove(staging.c_str()); return false; }
+
+    bool good = unzOpenCurrentFile(archive) == UNZ_OK;
+    unsigned long long total = 0;
+    std::array<unsigned char, 32768> buffer{};
+    while (good) {
+        const int received = unzReadCurrentFile(archive, buffer.data(), static_cast<unsigned>(buffer.size()));
+        if (received < 0) { good = false; break; }
+        if (received == 0) break;
+        total += static_cast<unsigned>(received);
+        if (total > info.uncompressed_size || total > kMaxFileBytes ||
+            fwrite(buffer.data(), 1, static_cast<size_t>(received), file) != static_cast<size_t>(received)) {
+            good = false;
             break;
         }
-        done += writeBytes;
     }
-    
-    fflush(fp);
-    fsync(fileno(fp));
-    fclose(fp);
-    
-    free(buffer);
-    if (done != fileInfo->uncompressed_size)
-        return -4;		
-    
-    unzCloseCurrentFile(unz);
-    return 0;
+    if (good && total != info.uncompressed_size) good = false;
+    if (good && fflush(file) != 0) good = false;
+    if (good && fsync(fileno(file)) != 0) good = false;
+    if (fclose(file) != 0) good = false;
+    if (unzCloseCurrentFile(archive) != UNZ_OK) good = false;
+
+    if (good && rename(staging.c_str(), path.c_str()) == 0) return true;
+    std::remove(staging.c_str());
+    return false;
+}
+
+bool validateArchive(unzFile archive) {
+    int status = unzGoToFirstFile(archive);
+    if (status != UNZ_OK) return false;
+    std::set<std::string> seen;
+    size_t entries = 0;
+    unsigned long long totalBytes = 0;
+    while (status == UNZ_OK) {
+        unz_file_info info{};
+        std::string name;
+        if (++entries > kMaxEntries || !fileInfo(archive, info, name)) return false;
+        if (!seen.insert(name).second) return false;
+        totalBytes += info.uncompressed_size;
+        if (totalBytes > kMaxArchiveBytes) return false;
+        status = unzGoToNextFile(archive);
+    }
+    return status == UNZ_END_OF_LIST_OF_FILE;
+}
 }
 
 namespace inst::zip {
-    bool extractFile(const std::string filename, const std::string destination) {
-        unzFile unz = unzOpen(filename.c_str());
-
-        int i = 0;
-        for (;;) {
-            int code;
-            if (i == 0) {
-                code = unzGoToFirstFile(unz);
-            } else {
-                code = unzGoToNextFile(unz);
-            }
-            i++;
-
-            if (code == UNZ_END_OF_LIST_OF_FILE) {
-                break;
-            } else {
-                unz_file_pos pos;
-                unzGetFilePos(unz, &pos);
-            }
-
-            unz_file_info_s * fileInfo = _getFileInfo(unz);
-
-            std::string fileName = destination;
-            fileName += _getFullFileName(unz, fileInfo);
-
-            if (fileName.back() != '/') {
-                int result = _extractFile(fileName.c_str(), unz, fileInfo);
-                if (result < 0) {
-                    free(fileInfo);
-                    unzClose(unz);
-                    return false;
-                }
-            }
-
-            free(fileInfo);
+bool extractFile(const std::string& filename, const std::string& destination) {
+    if (filename.empty() || destination.empty() || destination.back() != '/') return false;
+    unzFile archive = unzOpen(filename.c_str());
+    if (!archive) return false;
+    bool success = validateArchive(archive);
+    int status = success ? unzGoToFirstFile(archive) : UNZ_END_OF_LIST_OF_FILE;
+    while (success && status == UNZ_OK) {
+        unz_file_info info{};
+        std::string name;
+        if (!fileInfo(archive, info, name) || !extractMember(archive, destination + name, info)) {
+            success = false;
+            break;
         }
-
-        if (i <= 0) {
-            unzClose(unz);
-            return false;
-        }
-
-        unzClose(unz);
-        return true;
+        status = unzGoToNextFile(archive);
     }
+    if (success && status != UNZ_END_OF_LIST_OF_FILE) success = false;
+    if (unzClose(archive) != UNZ_OK) success = false;
+    return success;
+}
 }
