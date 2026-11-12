@@ -51,3 +51,9 @@ Ese nombre es un **ejemplo reservado para el futuro**, no una versión creada. E
 El workflow de CI ahora ensaya el empaquetado en cada ejecución con pruebas unitarias y un job que ensambla el ZIP a partir del NRO compilado. El mismo script se utiliza en el workflow de releases para evitar duplicaciones. La prueba verifica también que las sumas SHA-256 coinciden con los archivos realmente entregados.
 
 Los artefactos de CI no se muestran como descargas oficiales de GitHub Pages hasta que exista una release pública aprobada.
+
+## Primera beta pública
+
+El [12 de noviembre de 2026 se publicó v1.3.6-community.1-beta.1](https://github.com/Alexis-VsCode/Awoo-Installer/releases/tag/v1.3.6-community.1-beta.1) como **pre-release**, sin pruebas acreditadas en hardware real. El workflow de publicación completo terminó correctamente: verificaciones de seguridad, traducciones y ZIP, compilación cruzada, empaquetado, SHA-256 y publicación.
+
+Los usuarios pueden dejar sus resultados en el [Issue #8](https://github.com/Alexis-VsCode/Awoo-Installer/issues/8). Una beta no equivale a una release estable ni certifica soporte para Kefir 927.

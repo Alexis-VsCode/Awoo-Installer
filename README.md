@@ -4,7 +4,7 @@
 
 [Portal del proyecto](https://alexis-vscode.github.io/Awoo-Installer/) · [Código fuente](https://github.com/Alexis-VsCode/Awoo-Installer) · [Descargas](https://github.com/Alexis-VsCode/Awoo-Installer/releases) · [Incidencias](https://github.com/Alexis-VsCode/Awoo-Installer/issues) · [Contribuir](CONTRIBUTING.md)
 
-> **Estado del proyecto:** base comunitaria integrada en `master`, CI aprobado y preparación de **beta pública para pruebas de la comunidad**. La compatibilidad en hardware real sigue pendiente. Las versiones beta, cuando estén publicadas, no deben interpretarse como releases estables.
+> **Estado del proyecto:** [**beta pública v1.3.6-community.1-beta.1**](https://github.com/Alexis-VsCode/Awoo-Installer/releases/tag/v1.3.6-community.1-beta.1) publicada para pruebas voluntarias. CI aprobado; **sin certificación en consola real y sin versión estable**.
 
 ## Presentación
 
@@ -31,11 +31,11 @@ La prioridad es una evolución **incremental**, respetuosa con el código origin
 
 ## Beta pública: pruebas comunitarias
 
-Con autorización del mantenedor se ha preparado una **versión preliminar (pre-release)** para que la comunidad pueda ejecutar pruebas y reportar problemas. **No está certificada ni probada en una consola real por este proyecto.** Se distribuye para evaluación voluntaria, no como versión estable.
+Con autorización del mantenedor se publicó la **versión preliminar [v1.3.6-community.1-beta.1](https://github.com/Alexis-VsCode/Awoo-Installer/releases/tag/v1.3.6-community.1-beta.1)** para que la comunidad pueda ejecutar pruebas y reportar problemas. **No está certificada ni probada en una consola real por este proyecto.** Se distribuye para evaluación voluntaria, no como versión estable.
 
 - [Consultar la beta y sus archivos](https://github.com/Alexis-VsCode/Awoo-Installer/releases): el portal identifica las versiones de prueba y sus advertencias.
 - [Notas, límites y procedimiento de prueba](docs/BETA-PUBLICACION.md).
-- [Reportar errores](https://github.com/Alexis-VsCode/Awoo-Installer/issues/new/choose) y [matriz de compatibilidad #2](https://github.com/Alexis-VsCode/Awoo-Installer/issues/2).
+- [Compartir resultados comunitarios en el Issue #8](https://github.com/Alexis-VsCode/Awoo-Installer/issues/8); para errores individuales utiliza [Issues](https://github.com/Alexis-VsCode/Awoo-Installer/issues/new/choose). Consulta también la [matriz de Kefir #2](https://github.com/Alexis-VsCode/Awoo-Installer/issues/2).
 
 Antes de usar un NRO de prueba, **respalda el instalador anterior**, trabaja en un entorno de pruebas y no alteres sysMMC ni firmware. Las mejoras de seguridad y la compilación automática no garantizan el funcionamiento de USB, red o procesamiento de paquetes en todas las consolas.
 

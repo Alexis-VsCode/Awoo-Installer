@@ -34,3 +34,13 @@ Consulta la [discusión técnica del PR #1](https://github.com/Alexis-VsCode/Awo
 ## Versiones publicadas
 
 **Aún no hay una release comunitaria publicada.** No se reutilizan las versiones originales como si fueran versiones nuevas del fork.
+
+## Pre-release comunitaria v1.3.6-community.1-beta.1 — 12 de noviembre de 2026
+
+Primera beta **pública y experimental** de este fork, compilada desde `master` con pruebas automatizadas. Incluye NRO, ZIP y sumas SHA-256. No cuenta con certificación en hardware real; se distribuye para obtener comentarios y reportes de los usuarios.
+
+- [Archivos y advertencias de la beta](https://github.com/Alexis-VsCode/Awoo-Installer/releases/tag/v1.3.6-community.1-beta.1)
+- [Hilo comunitario de resultados](https://github.com/Alexis-VsCode/Awoo-Installer/issues/8)
+- [Ejecución de publicación automatizada](https://github.com/Alexis-VsCode/Awoo-Installer/actions/runs/43307730382)
+
+No se declara como estable ni se cierra la validación de compatibilidad pendiente.
