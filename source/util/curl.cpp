@@ -2,14 +2,14 @@
 #include <string>
 #include <sstream>
 #include <iostream>
+#include <cstdio>
 #include "util/curl.hpp"
 #include "util/config.hpp"
 #include "util/error.hpp"
 #include "ui/instPage.hpp"
 
 static size_t writeDataFile(void *ptr, size_t size, size_t nmemb, void *stream) {
-  size_t written = fwrite(ptr, size, nmemb, (FILE *)stream);
-  return written;
+  return fwrite(ptr, 1, size * nmemb, (FILE *)stream);
 }
 
 size_t writeDataBuffer(char *ptr, size_t size, size_t nmemb, void *userdata) {
@@ -36,8 +36,19 @@ namespace inst::curl {
         CURLcode result;
         FILE *pagefile;
         
-        curl_global_init(CURL_GLOBAL_ALL);
+        if (!pagefilename) return false;
+        pagefile = fopen(pagefilename, "wb");
+        if (!pagefile) return false;
+        if (curl_global_init(CURL_GLOBAL_ALL) != CURLE_OK) {
+            fclose(pagefile);
+            return false;
+        }
         curl_handle = curl_easy_init();
+        if (!curl_handle) {
+            fclose(pagefile);
+            curl_global_cleanup();
+            return false;
+        }
         
         curl_easy_setopt(curl_handle, CURLOPT_URL, ourUrl.c_str());
         curl_easy_setopt(curl_handle, CURLOPT_FOLLOWLOCATION, 1L);
@@ -50,13 +61,13 @@ namespace inst::curl {
         curl_easy_setopt(curl_handle, CURLOPT_WRITEFUNCTION, writeDataFile);
         if (writeProgress) curl_easy_setopt(curl_handle, CURLOPT_XFERINFOFUNCTION, progress_callback);
         
-        pagefile = fopen(pagefilename, "wb");
         curl_easy_setopt(curl_handle, CURLOPT_WRITEDATA, pagefile);
         result = curl_easy_perform(curl_handle);
         
         curl_easy_cleanup(curl_handle);
         curl_global_cleanup();
-        fclose(pagefile);
+        if (fclose(pagefile) != 0) return false;
+        if (result != CURLE_OK) std::remove(pagefilename);
 
         if (result == CURLE_OK) return true;
         else {
@@ -70,8 +81,12 @@ namespace inst::curl {
         CURLcode result;
         std::ostringstream stream;
         
-        curl_global_init(CURL_GLOBAL_ALL);
+        if (curl_global_init(CURL_GLOBAL_ALL) != CURLE_OK) return "";
         curl_handle = curl_easy_init();
+        if (!curl_handle) {
+            curl_global_cleanup();
+            return "";
+        }
         
         curl_easy_setopt(curl_handle, CURLOPT_URL, ourUrl.c_str());
         curl_easy_setopt(curl_handle, CURLOPT_FOLLOWLOCATION, 1L);
@@ -82,9 +97,9 @@ namespace inst::curl {
         curl_easy_setopt(curl_handle, CURLOPT_TIMEOUT_MS, timeout);
         curl_easy_setopt(curl_handle, CURLOPT_CONNECTTIMEOUT_MS, timeout);
         curl_easy_setopt(curl_handle, CURLOPT_WRITEFUNCTION, writeDataBuffer);
+        const std::string ourRange = std::to_string(firstRange) + "-" + std::to_string(secondRange);
         if (firstRange && secondRange) {
-            const char * ourRange = (std::to_string(firstRange) + "-" + std::to_string(secondRange)).c_str();
-            curl_easy_setopt(curl_handle, CURLOPT_RANGE, ourRange);
+            curl_easy_setopt(curl_handle, CURLOPT_RANGE, ourRange.c_str());
         }
         
         curl_easy_setopt(curl_handle, CURLOPT_WRITEDATA, &stream);

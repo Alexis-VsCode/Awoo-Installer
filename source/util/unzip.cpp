@@ -40,14 +40,16 @@ bool fileInfo(unzFile archive, unz_file_info& info, std::string& name) {
 
 bool existingDirectory(const std::string& path) {
     struct stat info{};
-    return stat(path.c_str(), &info) == 0 && S_ISDIR(info.st_mode);
+    return lstat(path.c_str(), &info) == 0 && S_ISDIR(info.st_mode);
 }
 
 bool createParentDirectories(const std::string& path) {
     for (size_t offset = 0; (offset = path.find('/', offset)) != std::string::npos; ++offset) {
         const std::string prefix = path.substr(0, offset);
         if (prefix.empty() || prefix.back() == ':') continue;
-        if (mkdir(prefix.c_str(), 0775) != 0 && (errno != EEXIST || !existingDirectory(prefix))) return false;
+        if (mkdir(prefix.c_str(), 0775) != 0 && errno != EEXIST) return false;
+        // Existing parent directories must not be symbolic links.
+        if (!existingDirectory(prefix)) return false;
     }
     return true;
 }

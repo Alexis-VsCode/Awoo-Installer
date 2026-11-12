@@ -120,5 +120,7 @@ jobs:
             echo "La release ya existe: no se sobrescribirá automáticamente."
             exit 1
           fi
-          gh release create "$TAG"             dist/Awoo-Installer.nro dist/Awoo-Installer.zip dist/SHA256SUMS             --draft --generate-notes --title "Awoo Installer Community $TAG"
+          gh release create "$TAG" \
+            dist/Awoo-Installer.nro dist/Awoo-Installer.zip dist/SHA256SUMS \
+            --draft --generate-notes --title "Awoo Installer Community $TAG"
           echo "Borrador creado. Publicar solo después de las pruebas de hardware y revisión."

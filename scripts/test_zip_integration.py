@@ -73,4 +73,19 @@ with tempfile.TemporaryDirectory() as d:
     assert result.returncode != 0
     checks += 1
 
+with tempfile.TemporaryDirectory() as d:
+    root = Path(d)
+    outside = root / "outside"
+    outside.mkdir()
+    dest = root / "destination"
+    dest.mkdir()
+    (dest / "linked").symlink_to(outside, target_is_directory=True)
+    archive = root / "input.zip"
+    with zipfile.ZipFile(archive, "w") as z:
+        z.writestr("linked/written.txt", "no overwrite")
+    result = subprocess.run([str(exe), str(archive), str(dest) + os.sep], capture_output=True)
+    assert result.returncode != 0, "Debe rechazar enlaces simbólicos preexistentes"
+    assert not (outside / "written.txt").exists()
+    checks += 1
+
 print(f"ZIP scenarios validated: {checks}")
