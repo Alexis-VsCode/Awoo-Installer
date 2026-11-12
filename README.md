@@ -4,7 +4,7 @@
 
 [Portal del proyecto](https://alexis-vscode.github.io/Awoo-Installer/) · [Código fuente](https://github.com/Alexis-VsCode/Awoo-Installer) · [Descargas](https://github.com/Alexis-VsCode/Awoo-Installer/releases) · [Incidencias](https://github.com/Alexis-VsCode/Awoo-Installer/issues) · [Contribuir](CONTRIBUTING.md)
 
-> **Estado del proyecto:** línea base de modernización integrada en `master` mediante el [PR #1](https://github.com/Alexis-VsCode/Awoo-Installer/pull/1). Las pruebas automatizadas del PR y la compilación del NRO fueron aprobadas. El soporte en consola real sigue pendiente de verificación; todavía no hay una release comunitaria estable.
+> **Estado del proyecto:** base comunitaria integrada en `master`, CI aprobado y preparación de **beta pública para pruebas de la comunidad**. La compatibilidad en hardware real sigue pendiente. Las versiones beta, cuando estén publicadas, no deben interpretarse como releases estables.
 
 ## Presentación
 
@@ -28,6 +28,16 @@ La prioridad es una evolución **incremental**, respetuosa con el código origin
 **Importante:** la compilación satisfactoria no demuestra compatibilidad funcional ni autoriza actualizar el firmware de la consola. No se ha certificado Horizon OS 23.5.0.
 
 [Guía de pruebas en Kefir 927](docs/PRUEBAS-KEFIR-927.md) · [Hoja de ruta y estado](docs/HOJA-DE-RUTA.md)
+
+## Beta pública: pruebas comunitarias
+
+Con autorización del mantenedor se ha preparado una **versión preliminar (pre-release)** para que la comunidad pueda ejecutar pruebas y reportar problemas. **No está certificada ni probada en una consola real por este proyecto.** Se distribuye para evaluación voluntaria, no como versión estable.
+
+- [Consultar la beta y sus archivos](https://github.com/Alexis-VsCode/Awoo-Installer/releases): el portal identifica las versiones de prueba y sus advertencias.
+- [Notas, límites y procedimiento de prueba](docs/BETA-PUBLICACION.md).
+- [Reportar errores](https://github.com/Alexis-VsCode/Awoo-Installer/issues/new/choose) y [matriz de compatibilidad #2](https://github.com/Alexis-VsCode/Awoo-Installer/issues/2).
+
+Antes de usar un NRO de prueba, **respalda el instalador anterior**, trabaja en un entorno de pruebas y no alteres sysMMC ni firmware. Las mejoras de seguridad y la compilación automática no garantizan el funcionamiento de USB, red o procesamiento de paquetes en todas las consolas.
 
 ## Funcionalidad del proyecto original
 

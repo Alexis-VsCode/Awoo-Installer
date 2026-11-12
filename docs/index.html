@@ -205,8 +205,8 @@
           get('release-text').textContent = 'Ya existe una compilación de prueba en GitHub Actions, pero todavía no una versión oficial del fork validada en hardware. Las descargas de pruebas se consultan en Actions.';
           return;
         }
-        get('release-badge').textContent = release.prerelease ? 'Versión de prueba' : 'Versión publicada';
-        get('release-text').textContent = (release.name || release.tag_name) + ' · ' + date(release.published_at) + ' · Comprueba compatibilidad y notas antes de utilizarla.';
+        get('release-badge').textContent = release.prerelease ? 'BETA PÚBLICA · NO CERTIFICADA' : 'Versión publicada';
+        get('release-text').textContent = (release.name || release.tag_name) + ' · ' + date(release.published_at) + (release.prerelease ? ' · Versión experimental sin pruebas verificadas en hardware: consulta notas y realiza copias de seguridad.' : ' · Comprueba compatibilidad y notas antes de utilizarla.');
         for (const asset of release.assets) {
           if (asset.name === 'Awoo-Installer.nro') showDownload('download-nro', asset.browser_download_url);
           if (asset.name === 'Awoo-Installer.zip') showDownload('download-zip', asset.browser_download_url);
