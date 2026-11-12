@@ -102,7 +102,7 @@
         <a id="download-sha" class="link hidden" href="#descargar">Ver SHA-256</a>
         <a class="link" href="https://github.com/Alexis-VsCode/Awoo-Installer/releases">Todas las releases</a>
       </div>
-      <p class="small muted">Cada descarga debe proceder de una release propia y contener sus checksums. La compilación por sí sola no certifica compatibilidad con una consola real.</p>
+      <p class="small muted">El código de modernización se incorporó a la rama principal con el PR #1. CI genera artefactos de desarrollo; la primera release pública requiere pruebas de consola, notas de cambios y sumas SHA-256. Compilar no certifica compatibilidad.</p>
     </section>
     <section class="container section" id="capturas">
       <div class="eyebrow">Interfaz original</div><h2>Así funciona Awoo Installer</h2>
@@ -120,9 +120,9 @@
         <tr><td>23.0.1</td><td>Atmosphère 1.12.1 oficial</td><td>Pendiente de validación</td></tr>
         <tr><td>23.5.0</td><td>CFW sin soporte verificado para este proyecto</td><td>No validado; no actualizar para probar este fork</td></tr>
       </tbody></table></div>
-      <p class="small muted">Matriz revisada el 10 de noviembre de 2026. Consulta las notas de <a href="https://github.com/Atmosphere-NX/Atmosphere/releases">Atmosphère</a> y <a href="https://github.com/rashevskyv/kefir/releases">Kefir</a> antes de modificar tu entorno.</p>
+      <p class="small muted">Matriz revisada el 12 de noviembre de 2026. Consulta las notas de <a href="https://github.com/Atmosphere-NX/Atmosphere/releases">Atmosphère</a> y <a href="https://github.com/rashevskyv/kefir/releases">Kefir</a> antes de modificar tu entorno.</p>
     </section>
-    <section class="container section" id="mejoras"><div class="eyebrow">Ingeniería de mantenimiento</div><h2>Qué aporta este fork</h2>
+    <section class="container section" id="mejoras"><div class="eyebrow">Ingeniería de mantenimiento · PR #1 integrado</div><h2>Qué aporta este fork</h2>
       <div class="cards">
         <article><h3>Seguridad</h3><p>Correcciones de validación TLS, transferencia USB y extracción de archivos. Cambios sujetos a revisión y pruebas.</p></article>
         <article><h3>Compilaciones trazables</h3><p>Integración continua, dependencias controladas, artefactos y sumas SHA-256 asociados a cada release.</p></article>
@@ -146,14 +146,14 @@
     <section class="container section" id="actividad" aria-labelledby="activity-title">
       <div class="eyebrow">Datos públicos de GitHub</div>
       <h2 id="activity-title">Actividad del proyecto</h2>
-      <p class="section-intro">Últimas revisiones, propuestas, incidencias y comentarios del repositorio. La información se consulta en GitHub al abrir esta página; los datos pueden tardar en actualizarse o quedar temporalmente limitados por su API pública.</p>
+      <p class="section-intro">Cambios recientes de la rama principal, pull requests fusionados o abiertos, incidencias y comentarios públicos. Los datos se consultan en la API de GitHub al cargar la página; pueden existir límites temporales de consulta.</p>
       <div class="activity-status">
         <span id="ci-badge" class="status" role="status">Consultando compilación...</span>
         <a class="link" href="https://github.com/Alexis-VsCode/Awoo-Installer/actions">Ver todas las ejecuciones</a>
         <button class="button-quiet" type="button" id="refresh-activity">Actualizar actividad</button>
       </div>
       <div class="activity-layout">
-        <article class="activity-block"><h3>Últimos cambios</h3><ul class="activity-list" id="activity-commits"><li class="muted">Consultando GitHub...</li></ul><a class="small" href="https://github.com/Alexis-VsCode/Awoo-Installer/commits/feat/kefir-927-modernization">Historial completo</a></article>
+        <article class="activity-block"><h3>Últimos cambios</h3><ul class="activity-list" id="activity-commits"><li class="muted">Consultando GitHub...</li></ul><a class="small" href="https://github.com/Alexis-VsCode/Awoo-Installer/commits/master">Historial completo</a></article>
         <article class="activity-block"><h3>Pull requests</h3><ul class="activity-list" id="activity-prs"><li class="muted">Consultando GitHub...</li></ul><a class="small" href="https://github.com/Alexis-VsCode/Awoo-Installer/pulls">Ver propuestas</a></article>
         <article class="activity-block"><h3>Incidencias</h3><ul class="activity-list" id="activity-issues"><li class="muted">Consultando GitHub...</li></ul><a class="small" href="https://github.com/Alexis-VsCode/Awoo-Installer/issues">Ver incidencias</a></article>
         <article class="activity-block"><h3>Últimos comentarios públicos</h3><ul class="activity-list" id="activity-comments"><li class="muted">Consultando GitHub...</li></ul><a class="small" href="https://github.com/Alexis-VsCode/Awoo-Installer/pulls/1">Participar en la revisión</a></article>
@@ -253,13 +253,13 @@
       refresh.disabled = true;
       const tasks = [
         {
-          id:'activity-commits',endpoint:'/commits?sha=feat%2Fkefir-927-modernization&per_page=4',
+          id:'activity-commits',endpoint:'/commits?sha=master&per_page=4',
           format:c => ({title:(c.commit?.message || 'Cambio sin descripción').split('\n')[0],url:c.html_url,meta:(c.sha||'').slice(0,7)+' · '+date(c.commit?.committer?.date)}),
           empty:'Todavía no se dispone de cambios consultables.'
         },
         {
-          id:'activity-prs',endpoint:'/pulls?state=open&sort=updated&direction=desc&per_page=4',
-          format:p => ({title:'#'+p.number+' · '+p.title,url:p.html_url,meta:(p.draft?'En revisión':'Abierto')+' · '+date(p.updated_at)}),
+          id:'activity-prs',endpoint:'/pulls?state=all&sort=updated&direction=desc&per_page=4',
+          format:p => ({title:'#'+p.number+' · '+p.title,url:p.html_url,meta:(p.merged_at?'Fusionado':p.draft?'En revisión':p.state==='closed'?'Cerrado':'Abierto')+' · '+date(p.updated_at)}),
           empty:'No hay pull requests abiertos.'
         },
         {
@@ -293,7 +293,7 @@
         // La API pública puede estar limitada; conservar enlaces a GitHub.
       }
       try {
-        const data = await request('/actions/runs?branch=feat%2Fkefir-927-modernization&per_page=5');
+        const data = await request('/actions/runs?branch=master&per_page=5');
         const run = data.workflow_runs?.find(r => r.name === 'C++ compatibility and security checks');
         const label = run?.status === 'completed'
           ? (run.conclusion === 'success' ? 'CI: compilación y pruebas aprobadas' : 'CI: última ejecución requiere revisión')

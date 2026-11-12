@@ -13,7 +13,7 @@ La página [GitHub Pages](https://alexis-vscode.github.io/Awoo-Installer/) detec
 
 ## Workflow de publicación
 
-El workflow [Preparar release comunitaria](https://github.com/Alexis-VsCode/Awoo-Installer/actions) está definido en la rama de modernización y se prepara para futuras etiquetas que comiencen por v. Ejecuta validación estática, pruebas ZIP, compilación cruzada, empaquetado y hashes SHA-256.
+El workflow [Preparar release comunitaria](https://github.com/Alexis-VsCode/Awoo-Installer/actions) ya está integrado en `master` y se prepara para etiquetas nuevas que comiencen por `v`. Ejecuta validación estática, pruebas ZIP, compilación cruzada, empaquetado y hashes SHA-256.
 
 Cuando se activa por etiqueta, crea una release **en estado borrador**. Se requiere revisión manual antes de hacerla pública. Este flujo evita anunciar compatibilidad por el simple hecho de haber compilado.
 
@@ -31,3 +31,17 @@ Cuando se activa por etiqueta, crea una release **en estado borrador**. Se requi
 Para corregir la aplicación no es necesario actualizar el firmware de la consola. Nunca se publicarán juegos, claves, firmware ni parches de terceros desde este repositorio.
 
 [Documentación de compilación](COMPILACION.md) · [Pruebas Kefir 927](PRUEBAS-KEFIR-927.md)
+
+## Preparación de etiquetas
+
+**No crear una etiqueta pública hasta aprobar la fase de pruebas en consola.** Tras registrar la evidencia y revisar el commit de distribución, desde una copia local actualizada:
+
+```bash
+git fetch origin
+git switch master
+git pull --ff-only origin master
+git tag -a v1.3.6-community.1 -m "Candidata comunitaria: validación documentada"
+git push origin v1.3.6-community.1
+```
+
+Ese nombre es un **ejemplo reservado para el futuro**, no una versión creada. El workflow construirá los artefactos y abrirá un borrador de GitHub Release que deberá revisarse antes de publicar. Para una compilación experimental sin crear una etiqueta, utiliza **Actions → Preparar release comunitaria → Run workflow**; en ese caso solo genera artefactos y no publica una release.

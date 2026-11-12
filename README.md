@@ -4,7 +4,7 @@
 
 [Portal del proyecto](https://alexis-vscode.github.io/Awoo-Installer/) · [Código fuente](https://github.com/Alexis-VsCode/Awoo-Installer) · [Descargas](https://github.com/Alexis-VsCode/Awoo-Installer/releases) · [Incidencias](https://github.com/Alexis-VsCode/Awoo-Installer/issues) · [Contribuir](CONTRIBUTING.md)
 
-> **Estado del proyecto:** modernización en desarrollo. Las pruebas automatizadas y la compilación de la rama de trabajo se han completado correctamente; la compatibilidad en hardware real aún debe verificarse. No hay una release comunitaria estable aprobada.
+> **Estado del proyecto:** línea base de modernización integrada en `master` mediante el [PR #1](https://github.com/Alexis-VsCode/Awoo-Installer/pull/1). Las pruebas automatizadas del PR y la compilación del NRO fueron aprobadas. El soporte en consola real sigue pendiente de verificación; todavía no hay una release comunitaria estable.
 
 ## Presentación
 
@@ -22,8 +22,8 @@ La prioridad es una evolución **incremental**, respetuosa con el código origin
 | Atmosphère | 1.12.1 | Pendiente de pruebas en consola |
 | Distribución | Kefir 927 | Pendiente de pruebas en consola |
 | Arranque | emuMMC (E) | Confirmado como entorno previsto |
-| Compilación C++ / devkitPro | GitHub Actions | Aprobada en la rama de modernización |
-| Pruebas de rutas ZIP y seguridad | GitHub Actions | Aprobadas en la rama de modernización |
+| Compilación C++ / devkitPro | GitHub Actions | Aprobada en el PR #1 (integrado en master) |
+| Pruebas de rutas ZIP y seguridad | GitHub Actions | Aprobadas en el PR #1 (integrado en master) |
 
 **Importante:** la compilación satisfactoria no demuestra compatibilidad funcional ni autoriza actualizar el firmware de la consola. No se ha certificado Horizon OS 23.5.0.
 
@@ -37,7 +37,7 @@ Se recomienda utilizar únicamente software y contenido para el que se disponga 
 
 ## Aportes de mantenimiento
 
-La rama [`feat/kefir-927-modernization`](https://github.com/Alexis-VsCode/Awoo-Installer/tree/feat/kefir-927-modernization) contiene las siguientes mejoras propuestas:
+La rama principal [`master`](https://github.com/Alexis-VsCode/Awoo-Installer/tree/master) incluye las siguientes mejoras integradas mediante el [PR #1](https://github.com/Alexis-VsCode/Awoo-Installer/pull/1):
 
 - Restablecimiento de validación TLS en las rutas de red revisadas.
 - Controles de tamaño de transferencia por USB y correcciones de errores de conexión.
@@ -48,7 +48,7 @@ La rama [`feat/kefir-927-modernization`](https://github.com/Alexis-VsCode/Awoo-I
 
 Algunas funciones de actualización y descarga externa de parches permanecen **deshabilitadas temporalmente** durante el endurecimiento. Quedan pendientes revisiones adicionales de memoria, concurrencia, almacenamiento y compatibilidad de las API utilizadas por el instalador.
 
-El [**Pull Request #1**](https://github.com/Alexis-VsCode/Awoo-Installer/pull/1) es el registro de revisión técnica. Se mantiene en borrador hasta completar los criterios de aceptación.
+El [**Pull Request #1**](https://github.com/Alexis-VsCode/Awoo-Installer/pull/1) quedó **fusionado**, con revisión técnica en español y CI aprobado. Los bloqueos para una release estable se siguen mediante los [Issues #2–#7](https://github.com/Alexis-VsCode/Awoo-Installer/issues).
 
 ## Documentación
 

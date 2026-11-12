@@ -8,7 +8,7 @@ Awoo Installer Community utiliza C++17, devkitPro/devkitA64, libnx, Plutonium (s
 
 ## Compilación automatizada
 
-Abre [GitHub Actions](https://github.com/Alexis-VsCode/Awoo-Installer/actions), selecciona **C++ compatibility and security checks** y consulta una ejecución satisfactoria de la rama `feat/kefir-927-modernization`.
+Abre [GitHub Actions](https://github.com/Alexis-VsCode/Awoo-Installer/actions), selecciona **C++ compatibility and security checks** y consulta una ejecución satisfactoria de la rama `master`.
 
 El workflow comprueba seguridad y recursos de idioma, compila y prueba el extractor ZIP en entorno nativo, prepara Plutonium y genera `Awoo-Installer.nro`.
 
@@ -19,7 +19,7 @@ En la ejecución selecciona **Artifacts** y descarga `Awoo-Installer-ci-<sha>`. 
 ```bash
 git clone --recurse-submodules https://github.com/Alexis-VsCode/Awoo-Installer.git
 cd Awoo-Installer
-git switch feat/kefir-927-modernization
+git switch master
 git submodule update --init --recursive
 ```
 
@@ -31,7 +31,7 @@ Con el entorno devkitPro, libnx y todas las bibliotecas del proyecto correctamen
 make -j2
 ```
 
-La compilación debe generar el archivo `Awoo-Installer.nro` en la raíz del proyecto. Si falla, compara versiones y dependencias contra el workflow: [`.github/workflows/ci.yml`](https://github.com/Alexis-VsCode/Awoo-Installer/blob/feat/kefir-927-modernization/.github/workflows/ci.yml).
+La compilación debe generar el archivo `Awoo-Installer.nro` en la raíz del proyecto. Si falla, compara versiones y dependencias contra el workflow: [`.github/workflows/ci.yml`](https://github.com/Alexis-VsCode/Awoo-Installer/blob/master/.github/workflows/ci.yml).
 
 En Windows 11 se puede trabajar con Git y un contenedor devkitPro (Docker Desktop/WSL2), comprobando previamente que el volumen esté montado y que la imagen incluya las dependencias requeridas. No se recomienda instalar paquetes aleatorios para resolver errores de compilación.
 
