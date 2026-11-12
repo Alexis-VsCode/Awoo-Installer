@@ -17,6 +17,7 @@ Las entradas bajo **Sin publicar** corresponden a trabajos en revisión y **no**
 - Valores de configuración iniciales conservadores y migración tolerante de opciones heredadas.
 - Pruebas de seguridad y extracción ZIP en host.
 - Compilación automatizada de Awoo y Plutonium con devkitPro.
+- Prueba automática del empaquetador compartido y manifest SHA-256 en CI.
 
 ### Idioma y documentación
 - Traducción de los mensajes comunitarios a español e inglés.

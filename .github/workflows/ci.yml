@@ -1,4 +1,4 @@
-name: C++ compatibility and security checks
+name: CI - seguridad, compilación y distribución
 on:
   push:
     branches: [master, 'feat/**']
@@ -9,6 +9,7 @@ permissions:
   contents: read
 jobs:
   audit:
+    name: Reglas de seguridad, idiomas y empaquetado
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -16,7 +17,9 @@ jobs:
         run: |
           python3 scripts/check_security.py
           python3 scripts/check_translations.py
+          python3 scripts/test_release_package.py
   zip-security:
+    name: Pruebas de extracción ZIP
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -30,6 +33,7 @@ jobs:
           g++ -std=c++17 -Wall -Wextra -Werror -Iinclude tests/zip_cli.cpp source/util/unzip.cpp -lminizip -lz -o /tmp/awoo-zip-cli
           python3 scripts/test_zip_integration.py /tmp/awoo-zip-cli
   switch:
+    name: Compilación Nintendo Switch
     needs: audit
     runs-on: ubuntu-latest
     container:
@@ -59,5 +63,33 @@ jobs:
         with:
           name: Awoo-Installer-ci-${{ github.sha }}
           path: Awoo-Installer.nro
+          if-no-files-found: error
+          retention-days: 14
+
+  package:
+    name: Integridad NRO ZIP y SHA-256
+    needs: [switch, zip-security]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/download-artifact@v4
+        with:
+          name: Awoo-Installer-ci-${{ github.sha }}
+          path: dist
+      - name: Validar archivos de distribución
+        run: |
+          set -euo pipefail
+          python3 scripts/package_release.py dist/Awoo-Installer.nro dist
+          cd dist
+          sha256sum --check SHA256SUMS
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Awoo-Installer-distribution-${{ github.sha }}
+          path: |
+            dist/Awoo-Installer.nro
+            dist/Awoo-Installer.zip
+            dist/SHA256SUMS
           if-no-files-found: error
           retention-days: 14

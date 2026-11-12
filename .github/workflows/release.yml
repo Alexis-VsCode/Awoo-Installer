@@ -21,6 +21,7 @@ jobs:
           set -euo pipefail
           python3 scripts/check_security.py
           python3 scripts/check_translations.py
+          python3 scripts/test_release_package.py
       - name: Ejecutar pruebas ZIP
         run: |
           set -euo pipefail
@@ -75,17 +76,8 @@ jobs:
         run: |
           set -euo pipefail
           test -s dist/Awoo-Installer.nro
-          cp LICENSE README.md dist/
-          python3 - <<'PY'
-          from pathlib import Path
-          from zipfile import ZipFile, ZIP_DEFLATED
-          base = Path("dist")
-          with ZipFile(base / "Awoo-Installer.zip", "w", compression=ZIP_DEFLATED) as archive:
-              for name in ("Awoo-Installer.nro", "README.md", "LICENSE"):
-                  archive.write(base / name, arcname=name)
-          PY
+          python3 scripts/package_release.py dist/Awoo-Installer.nro dist
           cd dist
-          sha256sum Awoo-Installer.nro Awoo-Installer.zip > SHA256SUMS
           sha256sum --check SHA256SUMS
       - uses: actions/upload-artifact@v4
         with:

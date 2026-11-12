@@ -45,3 +45,9 @@ git push origin v1.3.6-community.1
 ```
 
 Ese nombre es un **ejemplo reservado para el futuro**, no una versión creada. El workflow construirá los artefactos y abrirá un borrador de GitHub Release que deberá revisarse antes de publicar. Para una compilación experimental sin crear una etiqueta, utiliza **Actions → Preparar release comunitaria → Run workflow**; en ese caso solo genera artefactos y no publica una release.
+
+## Comprobación automática del paquete
+
+El workflow de CI ahora ensaya el empaquetado en cada ejecución con pruebas unitarias y un job que ensambla el ZIP a partir del NRO compilado. El mismo script se utiliza en el workflow de releases para evitar duplicaciones. La prueba verifica también que las sumas SHA-256 coinciden con los archivos realmente entregados.
+
+Los artefactos de CI no se muestran como descargas oficiales de GitHub Pages hasta que exista una release pública aprobada.

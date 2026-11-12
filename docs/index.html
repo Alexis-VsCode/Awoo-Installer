@@ -294,7 +294,7 @@
       }
       try {
         const data = await request('/actions/runs?branch=master&per_page=5');
-        const run = data.workflow_runs?.find(r => r.name === 'C++ compatibility and security checks');
+        const run = data.workflow_runs?.find(r => (r.name === 'CI - seguridad, compilación y distribución' || r.name === 'C++ compatibility and security checks'));
         const label = run?.status === 'completed'
           ? (run.conclusion === 'success' ? 'CI: compilación y pruebas aprobadas' : 'CI: última ejecución requiere revisión')
           : (run ? 'CI: ejecución en curso' : 'CI: sin ejecuciones recientes');

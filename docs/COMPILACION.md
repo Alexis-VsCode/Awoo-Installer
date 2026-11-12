@@ -8,7 +8,7 @@ Awoo Installer Community utiliza C++17, devkitPro/devkitA64, libnx, Plutonium (s
 
 ## Compilación automatizada
 
-Abre [GitHub Actions](https://github.com/Alexis-VsCode/Awoo-Installer/actions), selecciona **C++ compatibility and security checks** y consulta una ejecución satisfactoria de la rama `master`.
+Abre [GitHub Actions](https://github.com/Alexis-VsCode/Awoo-Installer/actions), selecciona **CI - seguridad, compilación y distribución** y consulta una ejecución satisfactoria de la rama `master`.
 
 El workflow comprueba seguridad y recursos de idioma, compila y prueba el extractor ZIP en entorno nativo, prepara Plutonium y genera `Awoo-Installer.nro`.
 
@@ -58,3 +58,9 @@ Conserva la suma junto al commit de origen. Las releases futuras deberán inclui
 - Una versión de prueba no debe etiquetarse como estable por haber compilado.
 
 [Pruebas en Kefir 927](PRUEBAS-KEFIR-927.md) · [Hoja de ruta](HOJA-DE-RUTA.md)
+
+## Artefactos automáticos de CI
+
+Cuando el job **Integridad NRO ZIP y SHA-256** termina correctamente, la ejecución de `master` ofrece el artefacto `Awoo-Installer-distribution-<sha>` con el binario, ZIP y manifiesto `SHA256SUMS`. Es un entregable experimental de integración continua; no una release publicada ni una certificación de compatibilidad.
+
+El empaquetado utiliza `scripts/package_release.py`, compartido con el workflow de releases y comprobado con `scripts/test_release_package.py`.
