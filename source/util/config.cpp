@@ -36,38 +36,56 @@ namespace inst::config {
     }
 
     void parseConfig() {
+        // Valores seguros al iniciar, incluso si existe un archivo antiguo o incompleto.
+        gAuthKey.clear();
+        sigPatchesUrl.clear();
+        lastNetUrl = "https://";
+        languageSetting = 99; // Idioma de la consola.
+        autoUpdate = false;
+        deletePrompt = true;
+        gayMode = false;
+        ignoreReqVers = false;
+        overClock = false;
+        usbAck = false;
+        validateNCAs = true;
+
+        std::ifstream file(inst::config::configPath);
+        if (!file.is_open()) {
+            setConfig();
+            return;
+        }
+
+        // No sobrescribir un archivo dañado; conservarlo para diagnosticar el fallo.
         try {
-            std::ifstream file(inst::config::configPath);
             nlohmann::json j;
             file >> j;
-            autoUpdate = j["autoUpdate"].get<bool>();
-            deletePrompt = j["deletePrompt"].get<bool>();
-            gAuthKey = j["gAuthKey"].get<std::string>();
-            gayMode = j["gayMode"].get<bool>();
-            ignoreReqVers = j["ignoreReqVers"].get<bool>();
-            languageSetting = j["languageSetting"].get<int>();
-            overClock = j["overClock"].get<bool>();
-            sigPatchesUrl = j["sigPatchesUrl"].get<std::string>();
-            usbAck = j["usbAck"].get<bool>();
-            validateNCAs = j["validateNCAs"].get<bool>();
-            lastNetUrl = j["lastNetUrl"].get<std::string>();
+            if (!j.is_object()) return;
+            const auto getBool = [&j](const char* name, bool& value) {
+                auto it = j.find(name);
+                if (it != j.end() && it->is_boolean()) value = it->get<bool>();
+            };
+            const auto getString = [&j](const char* name, std::string& value) {
+                auto it = j.find(name);
+                if (it != j.end() && it->is_string()) value = it->get<std::string>();
+            };
+            getBool("deletePrompt", deletePrompt);
+            getString("gAuthKey", gAuthKey);
+            getBool("gayMode", gayMode);
+            getBool("ignoreReqVers", ignoreReqVers);
+            getBool("overClock", overClock);
+            getBool("usbAck", usbAck);
+            getBool("validateNCAs", validateNCAs);
+            getString("lastNetUrl", lastNetUrl);
+
+            auto lang = j.find("languageSetting");
+            if (lang != j.end() && lang->is_number_integer()) {
+                languageSetting = lang->get<int>();
+            }
+            // Las opciones automáticas de actualización permanecen deshabilitadas.
+            autoUpdate = false;
         }
         catch (...) {
-            // If loading values from the config fails, we just load the defaults and overwrite the old config
-            gAuthKey = {0x41,0x49,0x7a,0x61,0x53,0x79,0x42,0x4d,0x71,0x76,0x34,0x64,0x58,0x6e,0x54,0x4a,0x4f,0x47,0x51,0x74,0x5a,0x5a,0x53,0x33,0x43,0x42,0x6a,0x76,0x66,0x37,0x34,0x38,0x51,0x76,0x78,0x53,0x7a,0x46,0x30};
-            sigPatchesUrl = "https://sigmapatches.coomer.party/sigpatches.zip";
-            languageSetting = 99;
-            autoUpdate = true;
-            deletePrompt = true;
-            gayMode = false;
-            ignoreReqVers = true;
-            overClock = false;
-            usbAck = false;
-            validateNCAs = true;
-            lastNetUrl = "https://";
-            setConfig();
+            // Conservar la configuración original en disco; usar solo los valores seguros.
         }
-        if (sigPatchesUrl == "https://github.com/Huntereb/Awoo-Installer/releases/download/SignaturePatches/patches.zip")
-            sigPatchesUrl = "https://sigmapatches.coomer.party/sigpatches.zip";
     }
 }

@@ -61,6 +61,12 @@ namespace tin::install::xci
         tin::util::USBCmdHeader header = tin::util::USBCmdManager::SendFileRangeCmd(args->xciName, args->hfs0Offset, args->ncaSize);
 
         u8* buf = (u8*)memalign(0x1000, 0x800000);
+        if (buf == nullptr || header.dataSize == 0 || header.dataSize != args->ncaSize) {
+            free(buf);
+            stopThreadsUsbXci = true;
+            errorMessageUsbXci = "Invalid USB transfer size or memory allocation";
+            return 0;
+        }
         u64 sizeRemaining = header.dataSize;
         size_t tmpSizeRead = 0;
 
@@ -184,9 +190,9 @@ namespace tin::install::xci
     {
         LOG_DEBUG("buffering 0x%lx-0x%lx\n", offset, offset + size);
         tin::util::USBCmdHeader header = tin::util::USBCmdManager::SendFileRangeCmd(m_xciName, offset, size);
-        u8* tempBuffer = (u8*)memalign(0x1000, header.dataSize);
-        if (tin::util::USBRead(tempBuffer, header.dataSize) == 0) THROW_FORMAT(("inst.usb.error"_lang).c_str());
-        memcpy(buf, tempBuffer, header.dataSize);
-        free(tempBuffer);
+        if (header.dataSize != size)
+            THROW_FORMAT("USB payload size mismatch");
+        if (tin::util::USBRead(buf, size) != size)
+            THROW_FORMAT(("inst.usb.error"_lang).c_str());
     }
 }

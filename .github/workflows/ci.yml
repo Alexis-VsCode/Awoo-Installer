@@ -1,0 +1,63 @@
+name: C++ compatibility and security checks
+on:
+  push:
+    branches: [master, 'feat/**']
+  pull_request:
+    branches: [master]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check source safety invariants
+        run: |
+          python3 scripts/check_security.py
+          python3 scripts/check_translations.py
+  zip-security:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install native ZIP development headers
+        run: sudo apt-get update -qq && sudo apt-get install -y libminizip-dev zlib1g-dev
+      - name: Compile and test ZIP extraction
+        run: |
+          set -euo pipefail
+          g++ -std=c++17 -Wall -Wextra -Werror -Iinclude tests/zip_path.cpp -o /tmp/awoo-zip-path
+          /tmp/awoo-zip-path
+          g++ -std=c++17 -Wall -Wextra -Werror -Iinclude tests/zip_cli.cpp source/util/unzip.cpp -lminizip -lz -o /tmp/awoo-zip-cli
+          python3 scripts/test_zip_integration.py /tmp/awoo-zip-cli
+  switch:
+    needs: audit
+    runs-on: ubuntu-latest
+    container:
+      image: devkitpro/devkita64:20260219
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+          persist-credentials: false
+      - name: Verify toolchain and compile dependencies
+        shell: bash
+        run: |
+          set -euo pipefail
+          # Use packages preinstalled in the pinned devkitPro container.
+          # Avoid unaudited package upgrades at build time.
+          test -f "$DEVKITPRO/libnx/switch_rules"
+          make -C include/Plutonium/Plutonium -f Makefile -j2
+          test -s include/Plutonium/Plutonium/Output/lib/libpu.a
+      - name: Compile application
+        shell: bash
+        run: |
+          set -euo pipefail
+          make -j2
+          test -s Awoo-Installer.nro
+      - name: Archive NRO for review
+        uses: actions/upload-artifact@v4
+        with:
+          name: Awoo-Installer-ci-${{ github.sha }}
+          path: Awoo-Installer.nro
+          if-no-files-found: error
+          retention-days: 14
